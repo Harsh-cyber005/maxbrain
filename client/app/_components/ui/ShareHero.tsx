@@ -8,12 +8,14 @@ import { useParams, useRouter } from "next/navigation";
 import { ErrorIcon } from "@/app/_icons/ErrorIcon";
 import DownloadModal from "./DownloadModal";
 import { MenuIcon } from "@/app/_icons/MenuIcon";
+import { Loader2 } from "lucide-react";
+import SkeletonCard from "./SkeletonCard";
 
 interface dateType {
     day: string;
     month: string;
     year: string;
-}
+};
 
 interface dataType {
     _id: string;
@@ -23,18 +25,23 @@ interface dataType {
     content: string;
     tags: string[];
     date: dateType;
-}
+};
+
+const dummy = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9
+];
 
 export default function ShareHero() {
     const params = useParams();
     const [shareID, setShareID] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
     const [user, setUser] = useState<string>("");
-    const [h1Display, setH1Display] = useState<string>("Contents from User's Brain");
+    const [h1Display, setH1Display] = useState<string>("Loading...");
     const [data, setData] = useState<dataType[]>([]);
     const { filter } = useAppContext();
     const router = useRouter();
     const { setModalOpen, setModalComponent, setTotalContentShare, setSidebarOpen, setAuthName } = useAppContext();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setShareID(params.shareID as string || "");
@@ -48,16 +55,18 @@ export default function ShareHero() {
         } catch (error) {
             setError(true);
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
     async function mergeData() {
         try {
-            const response = await axios.post(`/brain/merge`,{
+            const response = await axios.post(`/brain/merge`, {
                 contents: data,
                 username: user,
             }, {
-                headers : {
+                headers: {
                     'Authorization': localStorage.getItem('token')
                 }
             });
@@ -68,13 +77,18 @@ export default function ShareHero() {
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setAuthName(localStorage.getItem('authName') || "");
-    },[])
+    }, [])
 
     useEffect(() => {
         if (data.length > 0) {
             setTotalContentShare(data.length);
+            let i = 1;
+            const dummy = data.map(() => {
+                return i++;
+            });
+            localStorage.setItem('dummmy',)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
@@ -100,12 +114,22 @@ export default function ShareHero() {
                 {
                     !error &&
                     <div className="flex justify-between items-center pb-10">
-                        <div onClick={()=>{
-                            router.replace('/');
-                        }} className="hidden xs:flex text-[#5046E4] cursor-pointer">
-                            <h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
-                            <h1 className="text-2xl font-bold md:hidden hidden xs:flex">{user || "Shared Brain"}</h1>
-                        </div>
+                        {
+                            loading &&
+                            <div className="flex items-center justify-center text-[#5046E4]">
+                                <h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
+                                <Loader2 className="animate-spin stroke-2 size-6" />
+                            </div>
+                        }
+                        {
+                            !loading &&
+                            <div onClick={() => {
+                                router.replace('/');
+                            }} className="hidden xs:flex text-[#5046E4] cursor-pointer">
+                                <h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
+                                <h1 className="text-2xl font-bold md:hidden hidden xs:flex">{user || "Shared Brain"}</h1>
+                            </div>
+                        }
                         <div className="flex justify-start items-center gap-3 xs:hidden">
                             <div onClick={() => {
                                 setSidebarOpen(true)
@@ -136,23 +160,33 @@ export default function ShareHero() {
                         </div>
                     </div>
                 }
-                <div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4">
-                    {data
-                        .filter((item) => filter === "" || filter === item.type)
-                        .map((item) => (
-                            <Card
-                                id={item._id}
-                                key={item._id}
-                                title={item.title}
-                                link={item.link}
-                                type={item.type}
-                                content={item.content}
-                                tags={item.tags}
-                                date={item.date}
-                                shared={true}
-                            />
-                        ))}
-                </div>
+                {
+                    loading ?
+                        <div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
+                            {
+                                dummy.map((item) => {
+                                    return <SkeletonCard key={item} />
+                                })
+                            }
+                        </div> :
+                    <div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4">
+                        {data
+                            .filter((item) => filter === "" || filter === item.type)
+                            .map((item) => (
+                                <Card
+                                    id={item._id}
+                                    key={item._id}
+                                    title={item.title}
+                                    link={item.link}
+                                    type={item.type}
+                                    content={item.content}
+                                    tags={item.tags}
+                                    date={item.date}
+                                    shared={true}
+                                />
+                            ))}
+                    </div>
+                }
                 {
                     error && <div className="text-red-700 text-2xl mt-5 stroke-[5px] px-20 pt-10">
                         <ErrorIcon size="lg" className="size-16" />

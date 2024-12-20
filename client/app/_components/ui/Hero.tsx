@@ -10,12 +10,13 @@ import CreateModal from "./CreateModal";
 import { MenuIcon } from "@/app/_icons/MenuIcon";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import SkeletonCard from "./SkeletonCard";
 
 interface dateType {
 	day: string;
 	month: string;
 	year: string;
-}
+};
 
 interface dataType {
 	_id: string;
@@ -25,7 +26,11 @@ interface dataType {
 	content: string;
 	tags: string[];
 	date: dateType;
-}
+};
+
+const dummy = [
+	1,2,3,4,5,6,7,8,9
+];
 
 export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
@@ -153,16 +158,25 @@ export default function Hero() {
 						}} />
 					</div>
 				</div>
-				<div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
-
-					{
-						data.map((item, index) => {
-							if (filter === "" || filter === item.type) {
-								return <Card shared={false} id={item._id} key={index} title={item.title} link={item.link} type={item.type} content={item.content} tags={item.tags} date={item.date} deleteCard={deleteCard} />
+				{
+					!loading ? 
+						<div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
+							{
+								data.map((item, index) => {
+									if (filter === "" || filter === item.type) {
+										return <Card shared={false} id={item._id} key={index} title={item.title} link={item.link} type={item.type} content={item.content} tags={item.tags} date={item.date} deleteCard={deleteCard} />
+									}
+								})
 							}
-						})
-					}
-				</div>
+						</div> :
+						<div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
+							{
+								dummy.map((item) => {
+									return <SkeletonCard key={item} />
+								})
+							}
+						</div>
+				}
 			</div>
 		</div>
 	);
