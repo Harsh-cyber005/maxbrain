@@ -12,6 +12,10 @@ import { Toaster } from 'react-hot-toast';
 const Signin = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [usernameEmpty, setUsernameEmpty] = useState(true);
+    const [emptyUsernamePrompt, setEmptyUsernamePrompt] = useState(false);
+    const [passwordEmpty, setPasswordEmpty] = useState(true);
+    const [emptyPasswordPrompt, setEmptyPasswordPrompt] = useState(false);
 
     const router = useRouter();
 
@@ -20,6 +24,17 @@ const Signin = () => {
     const [loading, setLoading] = useState(false);
 
     async function handleSignin() {
+        if(usernameEmpty) {
+            setEmptyUsernamePrompt(true);
+            if(passwordEmpty) {
+                setEmptyPasswordPrompt(true);
+            }
+            return;
+        }
+        if(passwordEmpty) {
+            setEmptyPasswordPrompt(true);
+            return;
+        }
         try {
             setLoading(true);
             const response = await axios.post('/signin', {
@@ -67,6 +82,24 @@ const Signin = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+        if (username.length > 0) {
+            setUsernameEmpty(false);
+            setEmptyUsernamePrompt(false);
+        } else {
+            setUsernameEmpty(true);
+        }
+    },[username]);
+
+    useEffect(() => {
+        if (password.length > 0) {
+            setPasswordEmpty(false);
+            setEmptyPasswordPrompt(false);
+        } else {
+            setPasswordEmpty(true);
+        }
+    },[password]);
+
     return (
         <div className="flex flex-col md:flex-row justify-center items-center min-h-[1000px] md:min-h-screen h-screen bg-[#F3F3F5]">
             <div className="md:w-[50%] h-full w-full">
@@ -82,9 +115,9 @@ const Signin = () => {
                             name='username'
                             id='username'
                             value={username}
-                            placeholder='Enter your username'
+                            placeholder={emptyUsernamePrompt?"Please Enter the username":'Enter your username'}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full border p-2 border-gray-300 rounded-md placeholder-gray-400"
+                            className={`w-full border p-2 rounded-md ${emptyUsernamePrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
                         />
                     </div>
                     <div>
@@ -94,9 +127,9 @@ const Signin = () => {
                             name='password'
                             id='password'
                             value={password}
-                            placeholder='Enter your password'
+                            placeholder={emptyPasswordPrompt?"Please Enter the password":'Enter your password'}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md placeholder-gray-400"
+                            className={`w-full border p-2 rounded-md ${emptyPasswordPrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
                         />
                     </div>
                     <Button loading={loading} onClick={() => {

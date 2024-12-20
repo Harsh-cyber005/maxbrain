@@ -12,6 +12,10 @@ import { Toaster } from 'react-hot-toast';
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [usernameEmpty, setUsernameEmpty] = useState(true);
+    const [emptyUsernamePrompt, setEmptyUsernamePrompt] = useState(false);
+    const [passwordEmpty, setPasswordEmpty] = useState(true);
+    const [emptyPasswordPrompt, setEmptyPasswordPrompt] = useState(false);
 
     const {setAuthName} = useAppContext();
 
@@ -20,6 +24,17 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
 
     async function handleSignup() {
+        if(usernameEmpty) {
+            setEmptyUsernamePrompt(true);
+            if(passwordEmpty) {
+                setEmptyPasswordPrompt(true);
+            }
+            return;
+        }
+        if(passwordEmpty) {
+            setEmptyPasswordPrompt(true);
+            return;
+        }
         try{
             setLoading(true);
             const response = await axios.post('/signup', {
@@ -50,6 +65,24 @@ const Signup = () => {
         }
     },[])
 
+    useEffect(() => {
+        if (username.length > 0) {
+            setUsernameEmpty(false);
+            setEmptyUsernamePrompt(false);
+        } else {
+            setUsernameEmpty(true);
+        }
+    },[username]);
+
+    useEffect(() => {
+        if (password.length > 0) {
+            setPasswordEmpty(false);
+            setEmptyPasswordPrompt(false);
+        } else {
+            setPasswordEmpty(true);
+        }
+    },[password]);
+
     return (
         <div className="flex flex-col md:flex-row justify-center items-center min-h-[1000px] md:min-h-screen h-screen bg-[#F3F3F5]">
             <div className="md:w-[50%] h-full w-full">
@@ -57,7 +90,7 @@ const Signup = () => {
             </div>
             <div className="flex items-center justify-center md:w-[50%] w-full h-full md:h-full">
                 <div className="w-full max-w-[20rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-                    <h2 className="text-2xl font-bold text-center text-gray-800">Welcome Back !</h2>
+                    <h2 className="text-2xl font-bold text-center text-gray-800">Create a New Account !</h2>
                     <div>
                         <label htmlFor="username">Username</label>
                         <input
@@ -65,9 +98,9 @@ const Signup = () => {
                             name='username'
                             id='username'
                             value={username}
-                            placeholder='Enter your username'
+                            placeholder={emptyUsernamePrompt?"Please Enter the username":'Enter your username'}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full border p-2 border-gray-300 rounded-md placeholder-gray-400"
+                            className={`w-full border p-2 rounded-md ${emptyUsernamePrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
                         />
                     </div>
                     <div>
@@ -77,9 +110,9 @@ const Signup = () => {
                             name='password'
                             id='password'
                             value={password}
-                            placeholder='Enter your password'
+                            placeholder={emptyPasswordPrompt?"Please Enter the password":'Enter your password'}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md placeholder-gray-400"
+                            className={`w-full border p-2 rounded-md ${emptyPasswordPrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
                         />
                     </div>
                     <Button loading={loading} onClick={() => {

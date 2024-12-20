@@ -9,6 +9,7 @@ import ShareModal from "./ShareModal";
 import CreateModal from "./CreateModal";
 import { MenuIcon } from "@/app/_icons/MenuIcon";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 interface dateType {
 	day: string;
@@ -30,7 +31,8 @@ export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
 	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken } = useAppContext();
 	const router = useRouter();
-	const [h1Display, setH1Display] = useState("");
+	const [h1Display, setH1Display] = useState("Loading...");
+	const [loading, setLoading] = useState(true);
 
 	async function fetchData() {
 		if (typeof window === "undefined") return;
@@ -43,6 +45,8 @@ export default function Hero() {
 			setData(response.data?.contents);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
 	}
 
@@ -105,12 +109,22 @@ export default function Hero() {
 		<div className="bg-background min-h-screen h-auto w-full ml-0 xs:ml-[96px] lg:ml-[300px]">
 			<div className="xxs:p-10 p-5">
 				<div className="flex justify-between items-center pb-10">
-					<div onClick={()=>{
-						router.replace('/');
-					}} className="text-[#3F3BD1] hidden xs:flex cursor-pointer">
-						<h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
-						<h1 className="text-2xl font-bold md:hidden hidden xs:flex">{authName}</h1>
-					</div>
+					{
+						loading &&
+							<div className="flex items-center justify-center text-[#3F3BD1]">
+								<h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
+								<Loader2 className="animate-spin stroke-2 size-6" />
+							</div>
+					}
+					{
+						!loading && 
+						<div onClick={()=>{
+							router.replace('/');
+						}} className="text-[#3F3BD1] hidden xs:flex cursor-pointer">
+							<h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
+							<h1 className="text-2xl font-bold md:hidden hidden xs:flex">{authName}</h1>
+						</div>
+					}
 					<div className="lg:flex hidden justify-center items-center gap-3">
 						<Button text="Share Brain" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {
 							setModalComponent(<ShareModal />);
