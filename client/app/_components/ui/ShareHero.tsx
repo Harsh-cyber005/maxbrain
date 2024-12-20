@@ -27,7 +27,7 @@ interface dataType {
     date: dateType;
 };
 
-const dummy = [
+const dummy = localStorage.getItem('dummy') ? JSON.parse(localStorage.getItem('dummy') as string) : [
     1, 2, 3, 4, 5, 6, 7, 8, 9
 ];
 
@@ -88,7 +88,7 @@ export default function ShareHero() {
             const dummy = data.map(() => {
                 return i++;
             });
-            localStorage.setItem('dummmy',)
+            localStorage.setItem('dummy', JSON.stringify(dummy));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
@@ -164,7 +164,7 @@ export default function ShareHero() {
                     loading ?
                         <div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
                             {
-                                dummy.map((item) => {
+                                dummy.map((item: number) => {
                                     return <SkeletonCard key={item} />
                                 })
                             }

@@ -49,7 +49,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [tries, setTries] = useState(0);
     const [token, setToken] = useState<string>("");
 
-    const baseShareLink = "https://second-brain-chi.vercel.app/share/brain/";
+    const baseShareLink = "https://duobrain.vercel.app/share/brain/";
 
     return (
         <AppContext.Provider value={{

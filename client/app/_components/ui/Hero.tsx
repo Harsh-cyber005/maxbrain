@@ -28,8 +28,8 @@ interface dataType {
 	date: dateType;
 };
 
-const dummy = [
-	1,2,3,4,5,6,7,8,9
+const dummy = localStorage.getItem('dummy') ? JSON.parse(localStorage.getItem('dummy') as string) : [
+	1, 2, 3, 4, 5, 6, 7, 8, 9
 ];
 
 export default function Hero() {
@@ -79,7 +79,7 @@ export default function Hero() {
 			setToken(localStorage.getItem('token') || "");
 			setAuthName(localStorage.getItem('authName') || "");
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -92,6 +92,13 @@ export default function Hero() {
 
 	useEffect(() => {
 		setTotalContent(data.length);
+		if (data.length > 0) {
+			let i = 1;
+			const dummy = data.map(() => {
+				return i++;
+			});
+			localStorage.setItem('dummy', JSON.stringify(dummy));
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data])
 
@@ -116,14 +123,14 @@ export default function Hero() {
 				<div className="flex justify-between items-center pb-10">
 					{
 						loading &&
-							<div className="flex items-center justify-center text-[#3F3BD1]">
-								<h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
-								<Loader2 className="animate-spin stroke-2 size-6" />
-							</div>
+						<div className="flex items-center justify-center text-[#3F3BD1]">
+							<h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
+							<Loader2 className="animate-spin stroke-2 size-6" />
+						</div>
 					}
 					{
-						!loading && 
-						<div onClick={()=>{
+						!loading &&
+						<div onClick={() => {
 							router.replace('/');
 						}} className="text-[#3F3BD1] hidden xs:flex cursor-pointer">
 							<h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
@@ -159,7 +166,7 @@ export default function Hero() {
 					</div>
 				</div>
 				{
-					!loading ? 
+					!loading ?
 						<div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
 							{
 								data.map((item, index) => {
@@ -171,7 +178,7 @@ export default function Hero() {
 						</div> :
 						<div className="flex flex-col xs:flex-row justify-center xs:justify-normal items-center xs:items-baseline flex-wrap gap-4 ">
 							{
-								dummy.map((item) => {
+								dummy.map((item: number) => {
 									return <SkeletonCard key={item} />
 								})
 							}
