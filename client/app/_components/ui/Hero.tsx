@@ -28,7 +28,7 @@ interface dataType {
 	date: dateType;
 };
 
-const dummy = localStorage.getItem('dummy') ? JSON.parse(localStorage.getItem('dummy') as string) : [
+const dummy = [
 	1, 2, 3, 4, 5, 6, 7, 8, 9
 ];
 
@@ -92,13 +92,6 @@ export default function Hero() {
 
 	useEffect(() => {
 		setTotalContent(data.length);
-		if (data.length > 0) {
-			let i = 1;
-			const dummy = data.map(() => {
-				return i++;
-			});
-			localStorage.setItem('dummy', JSON.stringify(dummy));
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data])
 
