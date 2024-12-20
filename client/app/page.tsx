@@ -11,7 +11,6 @@ export default function Home() {
 	const router = useRouter();
 	const { heroKey } = useAppContext();
 	const [loading, setLoading] = useState(true);
-
 	useEffect(() => {
 		if (!localStorage.getItem('token')) {
 			router.replace('/auth/login');
@@ -20,7 +19,6 @@ export default function Home() {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
 	return (
 		loading ?
 			<main>
