@@ -43,6 +43,8 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
     const dropdownRef = useRef<HTMLDivElement>(null);
     const menuButtonRef = useRef<HTMLDivElement>(null);
 
+    let interval: NodeJS.Timeout;
+
     const handleClickOutside = (event: MouseEvent) => {
         if (
             dropdownRef.current &&
@@ -72,7 +74,19 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
     };
 
     return (
-        <div onClick={()=>{
+        <div onMouseDown={()=>{
+            if(selectActive){
+                return;
+            }
+            interval = setInterval(() => {
+                handleToggleIncludeInSelected();
+            }, 2000);
+        }} onMouseUp={()=>{
+            if(selectActive){
+                return;
+            }
+            clearInterval(interval);
+        }} onClick={()=>{
             if(selectActive){
                 handleToggleIncludeInSelected();
             }
