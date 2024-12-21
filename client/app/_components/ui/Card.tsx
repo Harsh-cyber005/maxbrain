@@ -133,7 +133,10 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
                                 </div>
                             </div>}
                             {
-                                selectActive && <div onClick={handleToggleIncludeInSelected} className={`rounded-full ${selected?"bg-black text-white":""} hover:bg-gray-300 hover:text-white hover:duration-100 hover:scale-90 cursor-pointer`}>
+                                selectActive && <div onClick={(e)=>{
+                                    e.stopPropagation();
+                                    handleToggleIncludeInSelected();
+                                }} className={`rounded-full ${selected?"bg-black text-white":""} hover:bg-gray-300 hover:text-white hover:duration-100 hover:scale-90 cursor-pointer`}>
                                     <SelectIcon size='lg' />
                                 </div>
                             }

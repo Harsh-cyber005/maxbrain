@@ -37,7 +37,7 @@ const dummy = [
 
 export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
-	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected } = useAppContext();
+	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
@@ -109,6 +109,7 @@ export default function Hero() {
 				}
 			});
 			fetchData();
+			setHeroKey(Math.random());
 		} catch (error) {
 			console.log(error);
 		}
@@ -125,6 +126,7 @@ export default function Hero() {
 				}
 			});
 			fetchData();
+			setHeroKey(Math.random());
 			return 1;
 		} catch (error) {
 			console.log(error);
