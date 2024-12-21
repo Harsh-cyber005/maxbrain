@@ -119,7 +119,8 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
                                     showDropdown ? 'flex' : 'hidden'
                                 } select-none`}
                             >
-                                <div onClick={()=>{
+                                <div onClick={(e)=>{
+                                    e.stopPropagation();
                                     handleToggleIncludeInSelected();
                                     setSelectActive(true);
                                     setShowDropdown(false);

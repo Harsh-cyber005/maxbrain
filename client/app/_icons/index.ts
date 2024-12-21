@@ -1,6 +1,7 @@
 export interface IconProps {
     size: "sm" | "md" | "lg",
     className?: string
+    onClick?: React.MouseEventHandler<SVGSVGElement>
 }
 
 export const SizeStyles: Record<IconProps["size"], string> = {
