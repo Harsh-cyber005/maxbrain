@@ -14,6 +14,7 @@ import ShareOneModal from './ShareOneModal'
 import { LinkIcon } from '@/app/_icons/LinkIcon'
 import { InstagramIcon } from '@/app/_icons/Instagram'
 import { PinterestIcon } from '@/app/_icons/Pinterest'
+import CardDescription from './CardDescription'
 
 interface dateType {
     day: string;
@@ -82,7 +83,10 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared }
                 </div>
                 <CardEmbed type={type} link={link} />
                 {
-                    type !== "tweet" && <CardDocument content={content} />
+                    type === "document" && <CardDocument content={content} />
+                }
+                {
+                    (type !== "tweet" && type !=="document") && <CardDescription content={content} />
                 }
                 <div className='flex gap-2 items-center flex-wrap'>
                     {

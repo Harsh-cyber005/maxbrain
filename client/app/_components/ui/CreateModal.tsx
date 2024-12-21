@@ -5,6 +5,8 @@ import { Button } from './Button';
 import { PlusIcon } from '@/app/_icons/PlusIcon';
 import axios from '@/app/api/axios';
 import toast from 'react-hot-toast';
+import { MaxIcon } from '@/app/_icons/MaxIcon';
+import { BackIcon } from '@/app/_icons/BackIcon';
 
 interface formDataType {
     type: string;
@@ -26,6 +28,8 @@ function CreateModal() {
     const [contentDisabled, setContentDisabled] = useState(false);
     const [linkDisabled, setLinkDisabled] = useState(false);
     const [linkPlaceholder, setLinkPlaceholder] = useState("Link");
+    const [contentFull, setContentFull] = useState(false);
+    const [spanDisplay, setSpanDisplay] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target as HTMLInputElement;
@@ -135,7 +139,7 @@ function CreateModal() {
                     <CrossIcon size='md' />
                 </div>
             </div>
-            <form className="mx-auto w-full space-y-2">
+            <form className="mx-auto w-full space-y-2 relative">
                 <div onClick={(e)=>{
                     e.stopPropagation();
                 }} className="relative w-full">
@@ -177,16 +181,49 @@ function CreateModal() {
                 </div>
 
                 <div>
-                    <label htmlFor="content" className={`block font-medium ${contentDisabled ? "text-gray-400 select-none" : ""}`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}</label>
-                    <textarea
-                        id="content"
-                        name="content"
-                        placeholder="Description"
-                        disabled={contentDisabled}
-                        value={formData.content}
-                        onChange={handleInputChange}
-                        className="w-full border rounded p-2 resize-none disabled:bg-gray-100 disabled:text-gray-200 tweet-scroll"
-                    />
+                    {
+                        selectedOption === 'document' && 
+                            <label htmlFor="content" className={`flex justify-start items-center gap-2 font-medium ${contentDisabled ? "text-gray-400 select-none" : ""} mb-2`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}
+                                <Button onMouseEnter={()=>{
+                                    setSpanDisplay(true);
+                                }} onMouseLeave={()=>{
+                                    setSpanDisplay(false);
+                                }} onClick={(e: React.MouseEvent<HTMLButtonElement>)=>{
+                                    e.preventDefault();
+                                    console.log("max");
+                                    setContentFull(true);
+                                }} variant='none' size='square' startIcon={<MaxIcon size='sm'/>} />
+                                <span className={`text-xs bg-slate-200 rounded-full py-1 px-2 cursor-default select-none ${spanDisplay?"opacity-100":"opacity-0"} duration-200`}>Expand Content</span>
+                            </label>
+                    }
+                    {
+                        selectedOption !== 'document' && 
+                            <label htmlFor="content" className={`block font-medium ${contentDisabled ? "text-gray-400 select-none" : ""}`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}</label>
+                    }
+                    {
+                        contentFull && 
+                        <textarea
+                            id="content"
+                            name="content"
+                            placeholder={selectedOption==="document"?"Content":"Description"}
+                            disabled={contentDisabled}
+                            value={formData.content}
+                            onChange={handleInputChange}
+                            className="w-full h-full top-0 left-0 absolute border rounded p-2 resize-none disabled:bg-gray-100 disabled:text-gray-200 tweet-scroll"
+                        />
+                    }
+                    {
+                        !contentFull && 
+                        <textarea
+                            id="content"
+                            name="content"
+                            placeholder={selectedOption==="document"?"Content":"Description"}
+                            disabled={contentDisabled}
+                            value={formData.content}
+                            onChange={handleInputChange}
+                            className="w-full border rounded p-2 resize-none disabled:bg-gray-100 disabled:text-gray-200 tweet-scroll"
+                        />
+                    }
                 </div>
 
                 <div>
@@ -234,10 +271,19 @@ function CreateModal() {
                 </div>
             </form>
             <div>
-                <Button loading={loading} onClick={()=>{
-                    console.log(formData);
-                    handlePostContent();
-                }} variant='primary' size='md' text="Create" startIcon={<PlusIcon size='md' />} width='w-full' />
+                {
+                    contentFull && 
+                    <Button startIcon={<BackIcon size='md'/>} variant='primary' size='md' text='Back' width='w-full' onClick={()=>{
+                        setContentFull(false);
+                    }}/>
+                }
+                {
+                    !contentFull &&
+                    <Button loading={loading} onClick={()=>{
+                        console.log(formData);
+                        handlePostContent();
+                    }} variant='primary' size='md' text="Create" startIcon={<PlusIcon size='md' />} width='w-full' />
+                }
             </div>
             <div className='flex justify-center items-center'>
                 <p className='text-sm text-gray-600'>press create to add content</p>
