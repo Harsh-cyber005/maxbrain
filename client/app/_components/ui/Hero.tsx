@@ -116,7 +116,7 @@ export default function Hero() {
 				<div className="flex justify-between items-center pb-10">
 					{
 						loading &&
-						<div className="flex items-center justify-center text-[#3F3BD1]">
+						<div className="items-center justify-center text-[#3F3BD1] hidden xs:flex">
 							<h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
 							<Loader2 className="animate-spin stroke-2 size-6" />
 						</div>
@@ -146,6 +146,9 @@ export default function Hero() {
 						}} className='hover:bg-gray-200 duration-200 p-2 rounded-md cursor-pointer'>
 							<MenuIcon size='md' />
 						</div>
+						<h1 onClick={()=>{
+							router.replace('/');
+						}} className="text-xl font-bold cursor-pointer">duobrain</h1>
 					</div>
 					<div className="flex justify-end items-center gap-3 lg:hidden">
 						<Button text="" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {

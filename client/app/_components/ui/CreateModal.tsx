@@ -30,6 +30,8 @@ function CreateModal() {
     const [linkPlaceholder, setLinkPlaceholder] = useState("Link");
     const [contentFull, setContentFull] = useState(false);
     const [spanDisplay, setSpanDisplay] = useState(false);
+    const [titleEmpty, setTitleEmpty] = useState(true);
+    const [emptyTitlePrompt, setEmptyTitlePrompt] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target as HTMLInputElement;
@@ -39,6 +41,15 @@ function CreateModal() {
     const handleTagsChange = (tag: string) => {
         setFormData({ ...formData, tags: [...formData.tags, tag] });
     };
+
+    useEffect(()=>{
+        if(formData.title.trim() === "") {
+            setTitleEmpty(true);
+        } else {
+            setTitleEmpty(false);
+            setEmptyTitlePrompt(false);
+        }
+    },[formData])
 
     useEffect(() => {
         if (formData.type === "tweet") {
@@ -105,6 +116,10 @@ function CreateModal() {
     })
 
     async function handlePostContent() {
+        if(titleEmpty) {
+            setEmptyTitlePrompt(true);
+            return;
+        }
         try {
             setLoading(true);
             await axios.post("/content", {
@@ -173,17 +188,17 @@ function CreateModal() {
                         id="title"
                         name="title"
                         type="text"
-                        placeholder="New Content"
+                        placeholder={emptyTitlePrompt?"Please enter a valid title":"New Content"}
                         value={formData.title}
                         onChange={handleInputChange}
-                        className="w-full border rounded p-2"
+                        className={`w-full border rounded p-2 ${emptyTitlePrompt?"border-red-500 placeholder-red-500":"placeholder-gray-400 border-gray-300"}`}
                     />
                 </div>
 
                 <div>
                     {
                         selectedOption === 'document' && 
-                            <label htmlFor="content" className={`flex justify-start items-center gap-2 font-medium ${contentDisabled ? "text-gray-400 select-none" : ""} mb-2`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}
+                            <label htmlFor="content" className={`flex justify-start items-center gap-2 font-medium ${contentDisabled ? "text-gray-400 select-none" : ""}`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}
                                 <Button onMouseEnter={()=>{
                                     setSpanDisplay(true);
                                 }} onMouseLeave={()=>{
