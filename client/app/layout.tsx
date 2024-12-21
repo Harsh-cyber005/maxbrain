@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Second Brain App",
+	title: "duobrain App",
 	description: "Add and manage important contents to your second brain",
 	icons: [
 		{
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 			url: "/favicon.svg"
 		}
 	],
-	keywords: ["second brain", "notes", "knowledge management", "note-taking", "max-brain", "maxbrain", "productivity"],
+	keywords: ["second brain", "notes", "knowledge management", "note-taking", "max-brain", "maxbrain", "productivity", "duobrain"],
 	authors: [{ name: "harshmax" }]
 };
 

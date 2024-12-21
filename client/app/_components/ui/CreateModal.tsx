@@ -33,6 +33,8 @@ function CreateModal() {
     const [titleEmpty, setTitleEmpty] = useState(true);
     const [emptyTitlePrompt, setEmptyTitlePrompt] = useState(false);
 
+    const [contentFullButtonDisabled, setContentFullButtonDisabled] = useState(false);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target as HTMLInputElement;
         setFormData({ ...formData, [name]: value });
@@ -114,6 +116,14 @@ function CreateModal() {
             document.removeEventListener("keydown", handleKeyDown);
         }
     })
+
+    useEffect(()=>{
+        if(tagFocused) {
+            setContentFullButtonDisabled(true);
+        } else {
+            setContentFullButtonDisabled(false);
+        }
+    },[tagFocused])
 
     async function handlePostContent() {
         if(titleEmpty) {
@@ -199,7 +209,7 @@ function CreateModal() {
                     {
                         selectedOption === 'document' && 
                             <label htmlFor="content" className={`flex justify-start items-center gap-2 font-medium ${contentDisabled ? "text-gray-400 select-none" : ""}`}>Content {contentDisabled ? "( Disabled for Tweet )" : ""}
-                                <Button onMouseEnter={()=>{
+                                <Button disabled={contentFullButtonDisabled} onMouseEnter={()=>{
                                     setSpanDisplay(true);
                                 }} onMouseLeave={()=>{
                                     setSpanDisplay(false);

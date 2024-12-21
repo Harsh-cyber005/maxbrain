@@ -32,3 +32,16 @@
         border-radius: 20px;
         border: 3px solid var(--scroll-bar-bg-color);
     }
+
+    .shiver {
+        animation: shiver 0.3s infinite;
+        animation-delay: var(--random-delay);
+    }
+    
+    @keyframes shiver {
+        0% { transform: translateX(1.5px); }
+        25% { transform: translateX(-1.5px); }
+        50% { transform: translateX(1.5px); }
+        75% { transform: translateX(-1.5px); }
+        100% { transform: translateX(1.5px); }
+    }

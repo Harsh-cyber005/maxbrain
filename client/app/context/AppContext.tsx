@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface AppContextType {
     modalOpen: boolean;
@@ -30,6 +30,10 @@ interface AppContextType {
     setTries: React.Dispatch<React.SetStateAction<number>>;
     token: string;
     setToken: React.Dispatch<React.SetStateAction<string>>;
+    selectActive: boolean;
+    setSelectActive: React.Dispatch<React.SetStateAction<boolean>>;
+    selected: string[];
+    setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -48,6 +52,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [tries, setTries] = useState(0);
     const [token, setToken] = useState<string>("");
+    const [selectActive, setSelectActive] = useState<boolean>(false);
+    const [selected, setSelected] = useState<string[]>([]);
+
+    useEffect(() => {
+        if(selected.length === 0) {
+            setSelectActive(false);
+        }
+    }, [selected]);
 
     const baseShareLink = "https://duobrain.vercel.app/share/brain/";
 
@@ -79,7 +91,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             tries,
             setTries,
             token,
-            setToken
+            setToken,
+            selectActive,
+            setSelectActive,
+            selected,
+            setSelected
         }}>
             {children}
         </AppContext.Provider>

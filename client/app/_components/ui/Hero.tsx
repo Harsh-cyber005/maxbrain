@@ -11,6 +11,8 @@ import { MenuIcon } from "@/app/_icons/MenuIcon";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import SkeletonCard from "./SkeletonCard";
+import { DeleteIcon } from "@/app/_icons/DeleteIcon";
+import { CrossIcon } from "@/app/_icons/CrossIcon";
 
 interface dateType {
 	day: string;
@@ -34,7 +36,7 @@ const dummy = [
 
 export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
-	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken } = useAppContext();
+	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
@@ -113,7 +115,7 @@ export default function Hero() {
 	return (
 		<div className="bg-background min-h-screen h-auto w-full ml-0 xs:ml-[96px] lg:ml-[300px]">
 			<div className="xxs:p-10 p-5">
-				<div className="flex justify-between items-center pb-10">
+				<div className="flex justify-between items-center h-[42px] mb-10 overflow-y-hidden relative">
 					{
 						loading &&
 						<div className="items-center justify-center text-[#3F3BD1] hidden xs:flex">
@@ -123,22 +125,30 @@ export default function Hero() {
 					}
 					{
 						!loading &&
-						<div onClick={() => {
-							router.replace('/');
-						}} className="text-[#3F3BD1] hidden xs:flex cursor-pointer">
+						<div className="text-[#3F3BD1] hidden xs:flex cursor-pointer hover:text-[#403bd1db] duration-200">
 							<h1 className="text-2xl font-bold md:flex hidden">{h1Display}</h1>
 							<h1 className="text-2xl font-bold md:hidden hidden xs:flex">{authName}</h1>
 						</div>
 					}
-					<div className="lg:flex hidden justify-center items-center gap-3">
-						<Button text="Share Brain" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {
-							setModalComponent(<ShareModal />);
-							setModalOpen(true);
-						}} />
-						<Button text="Add Content" variant="primary" size="md" startIcon={<PlusIcon size="md" />} onClick={() => {
-							setModalComponent(<CreateModal />);
-							setModalOpen(true);
-						}} />
+					<div className={`lg:flex flex-col hidden justify-center items-center gap-3 absolute top-0 right-0 ${selectActive?"translate-y-[-52px]":""} duration-200`}>
+						<div className="flex justify-start items-center gap-3">
+							<Button text="Share Brain" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {
+								setModalComponent(<ShareModal />);
+								setModalOpen(true);
+							}} />
+							<Button text="Add Content" variant="primary" size="md" startIcon={<PlusIcon size="md" />} onClick={() => {
+								setModalComponent(<CreateModal />);
+								setModalOpen(true);
+							}} />
+						</div>
+						<div className="flex justify-center items-center gap-3">
+							<Button onClick={()=>{
+								setSelectActive(false);
+								setSelected([]);
+							}} text="Cancel" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
+							<Button text="Share" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
+							<Button text="Delete" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
+						</div>
 					</div>
 					<div className="flex justify-start items-center gap-3 xs:hidden">
 						<div onClick={() => {
@@ -150,15 +160,45 @@ export default function Hero() {
 							router.replace('/');
 						}} className="text-xl font-bold cursor-pointer">duobrain</h1>
 					</div>
-					<div className="flex justify-end items-center gap-3 lg:hidden">
-						<Button text="" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {
-							setModalComponent(<ShareModal />);
-							setModalOpen(true);
-						}} />
-						<Button text="" variant="primary" size="md" startIcon={<PlusIcon size="md" />} onClick={() => {
-							setModalComponent(<CreateModal />);
-							setModalOpen(true);
-						}} />
+					<div className={`xs:flex flex-col hidden justify-end items-end gap-3 lg:hidden absolute top-0 right-0 ${selectActive?"translate-y-[-45px]":"translate-y-[3px]"} duration-200`}>
+						<div className="flex justify-start items-center gap-3">
+							<Button text="" variant="secondary" size="md" startIcon={<ShareIcon size="md" />} onClick={() => {
+								setModalComponent(<ShareModal />);
+								setModalOpen(true);
+							}} />
+							<Button text="" variant="primary" size="md" startIcon={<PlusIcon size="md" />} onClick={() => {
+								setModalComponent(<CreateModal />);
+								setModalOpen(true);
+							}} />
+						</div>
+						<div className="flex justify-center items-center gap-3">
+							<Button onClick={()=>{
+								setSelectActive(false);
+								setSelected([]);
+							}} text="" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
+							<Button text="" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
+							<Button text="" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
+						</div>
+					</div>
+					<div className={`flex flex-col justify-end items-end gap-3 xs:hidden absolute top-0 right-0 ${selectActive?"translate-y-[-45px]":"translate-y-[3px]"} duration-200`}>
+						<div className="flex justify-start items-center gap-3">
+							<Button text="" variant="secondary" size="square-md" startIcon={<ShareIcon size="md" />} onClick={() => {
+								setModalComponent(<ShareModal />);
+								setModalOpen(true);
+							}} />
+							<Button text="" variant="primary" size="square-md" startIcon={<PlusIcon size="md" />} onClick={() => {
+								setModalComponent(<CreateModal />);
+								setModalOpen(true);
+							}} />
+						</div>
+						<div className="flex justify-center items-center gap-3">
+							<Button onClick={()=>{
+								setSelectActive(false);
+								setSelected([]);
+							}} text="" variant="none" size="square-md" startIcon={<CrossIcon size="md"/>}/>
+							<Button text="" variant="primary" size="square-md" startIcon={<ShareIcon size="md" />}/>
+							<Button text="" variant="danger" size="square-md" startIcon={<DeleteIcon size="md"/>}/>
+						</div>
 					</div>
 				</div>
 				{
@@ -167,7 +207,8 @@ export default function Hero() {
 							{
 								data.map((item, index) => {
 									if (filter === "" || filter === item.type) {
-										return <Card shared={false} id={item._id} key={index} title={item.title} link={item.link} type={item.type} content={item.content} tags={item.tags} date={item.date} deleteCard={deleteCard} />
+										const cardSelected = selected.includes(item._id);
+										return <Card shared={false} id={item._id} key={index} title={item.title} link={item.link} type={item.type} content={item.content} tags={item.tags} date={item.date} deleteCard={deleteCard} selected={cardSelected} />
 									}
 								})
 							}

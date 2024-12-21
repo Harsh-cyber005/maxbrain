@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 import React, { ReactElement } from "react";
 
 type Variants = "primary" | "secondary" | "danger" | "none";
-type Sizes = "sm" | "md" | "lg" | "square";
+type Sizes = "sm" | "md" | "lg" | "square" | "square-md";
 interface ButtonProps {
     variant: Variants;
     size: Sizes;
@@ -13,6 +13,7 @@ interface ButtonProps {
     onMouseEnter?: (e:React.MouseEvent<HTMLButtonElement>) => void;
     onMouseLeave?: (e:React.MouseEvent<HTMLButtonElement>) => void;
     loading?: boolean;
+    disabled?: boolean;
 }
 
 const VariantStyles: Record<Variants, string> = {
@@ -25,12 +26,13 @@ const SizeStyles: Record<Sizes, string> = {
     sm: "py-1 px-3 text-sm",
     md: "py-2 px-6 text-md",
     lg: "py-4 px-12 text-lg",
-    square: "py-1 px-1 text-sm"
+    square: "py-1 px-1 text-sm",
+    "square-md": "py-2 px-3 text-md"
 };
 
-export const Button: React.FC<ButtonProps> = ({ variant, size, text, startIcon, width, onClick, loading, onMouseEnter, onMouseLeave }: ButtonProps) => {
+export const Button: React.FC<ButtonProps> = ({ variant, size, text, startIcon, width, onClick, loading, onMouseEnter, onMouseLeave, disabled }: ButtonProps) => {
     return (
-        <button onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onClick} className={`${VariantStyles[variant]} ${SizeStyles[size]} ${width} rounded-md duration-200 flex justify-center items-center gap-2`}>
+        <button disabled={disabled} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onClick} className={`${VariantStyles[variant]} ${SizeStyles[size]} ${width} rounded-md duration-200 flex justify-center items-center gap-2`}>
             {
                 !loading &&
                 <div className="flex justify-center items-center gap-2">
