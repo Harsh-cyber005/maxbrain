@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import SkeletonCard from "./SkeletonCard";
 import { DeleteIcon } from "@/app/_icons/DeleteIcon";
 import { CrossIcon } from "@/app/_icons/CrossIcon";
+import DeleteModalSelected from "./DeletedSelectedModal";
 
 interface dateType {
 	day: string;
@@ -112,6 +113,28 @@ export default function Hero() {
 			console.log(error);
 		}
 	}
+
+	async function deleteSelected() : Promise<number> {
+		try {
+			await axios.delete(`/content/selected`, {
+				data: {
+					contentIds: selected
+				},
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				}
+			});
+			fetchData();
+			return 1;
+		} catch (error) {
+			console.log(error);
+			return 0;
+		} finally {
+			setSelectActive(false);
+			setSelected([]);
+		}
+	}
+
 	return (
 		<div className="bg-background min-h-screen h-auto w-full ml-0 xs:ml-[96px] lg:ml-[300px]">
 			<div className="xxs:p-10 p-5">
@@ -147,7 +170,10 @@ export default function Hero() {
 								setSelected([]);
 							}} text="Cancel" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
 							<Button text="Share" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
-							<Button text="Delete" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
+							<Button onClick={()=>{
+								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
+								setModalOpen(true);
+							}} text="Delete" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
 						</div>
 					</div>
 					<div className="flex justify-start items-center gap-3 xs:hidden">
@@ -177,7 +203,10 @@ export default function Hero() {
 								setSelected([]);
 							}} text="" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
 							<Button text="" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
-							<Button text="" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
+							<Button onClick={()=>{
+								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
+								setModalOpen(true);
+							}} text="" variant="danger" size="md" startIcon={<DeleteIcon size="md"/>}/>
 						</div>
 					</div>
 					<div className={`flex flex-col justify-end items-end gap-3 xs:hidden absolute top-0 right-0 ${selectActive?"translate-y-[-45px]":"translate-y-[3px]"} duration-200`}>
@@ -197,7 +226,10 @@ export default function Hero() {
 								setSelected([]);
 							}} text="" variant="none" size="square-md" startIcon={<CrossIcon size="md"/>}/>
 							<Button text="" variant="primary" size="square-md" startIcon={<ShareIcon size="md" />}/>
-							<Button text="" variant="danger" size="square-md" startIcon={<DeleteIcon size="md"/>}/>
+							<Button onClick={()=>{
+								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
+								setModalOpen(true);
+							}} text="" variant="danger" size="square-md" startIcon={<DeleteIcon size="md"/>}/>
 						</div>
 					</div>
 				</div>

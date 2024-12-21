@@ -230,6 +230,35 @@ app.delete('/api/v1/content',auth, async (req, res) => {
 	}
 });
 
+app.delete('/api/v1/content/selected',auth, async (req, res) => {
+	const requiredBody = z.object({
+		contentIds: z.array(z.string()),
+		userid: z.string()
+	});
+	const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+	if (!parsedDataWithSuccess.success){
+		res.status(411).json({
+			message: "Invalid input, provide valid contentIds",
+			error: parsedDataWithSuccess.error.issues
+		});
+		return;
+	}
+	const contentIds = req.body.contentIds;
+	const userid = req.body.userid;
+	try{
+		await ContentModel.deleteMany({ _id: { $in: contentIds }, userId: userid });
+		res.status(200).json({
+			message: "Contents deleted successfully"
+		});
+	} catch (e) {
+		res.status(500).json({
+			message: "Internal server error",
+			error: e
+		});
+		return;
+	}
+});
+
 app.post('/api/v1/brain/share',auth, async (req, res) => {
 	const requiredBody = z.object({
 		share: z.boolean(),
