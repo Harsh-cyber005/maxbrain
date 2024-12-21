@@ -72,7 +72,11 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
     };
 
     return (
-        <div style={{
+        <div onClick={()=>{
+            if(selectActive){
+                handleToggleIncludeInSelected();
+            }
+        }} style={{
             '--random-delay': `${Math.random() * 0.3}s`
         } as React.CSSProperties} className={`${selected?"bg-gray-50":"bg-white hover:bg-gray-50"} rounded-md  border-gray-200 border-2 border-solid w-[310px] p-5 flex flex-col gap-5 h-[450px] shadow-lg ${selectActive? !selected? "":"shiver" :""} text-base`}>
             <div className='w-full flex flex-col gap-5 h-[359px]'>
