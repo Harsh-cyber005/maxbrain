@@ -21,7 +21,7 @@ function Sidebar() {
         <div className={`lg:w-[300px] xs:w-max w-full py-7 px-5 h-screen fixed bg-white shadow-lg left-0 top-0 z-50 block xs:block ${sidebarOpen?"translate-x-0 xs:translate-x-0":"translate-x-[-100%] xs:translate-x-0"} transition-transform duration-300 ease-in-out`}>
             <div className='flex xs:justify-start justify-between items-center gap-3 px-3 cursor-pointer'>
                 <BrainIcon className='size-8 hidden xs:flex' />
-                <h1 className='text-xl font-bold lg:flex hidden'>Max Brain</h1>
+                <h1 className='text-xl font-bold lg:flex hidden'>duobrain</h1>
                 <h1 onClick={()=>{
                     router.replace('/')
                 }} className='text-xl font-bold xs:hidden flex text-[#5046E4]'>{authName}</h1>
