@@ -34,6 +34,11 @@ interface AppContextType {
     setSelectActive: React.Dispatch<React.SetStateAction<boolean>>;
     selected: string[];
     setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+    shareMany: boolean;
+    setShareMany: React.Dispatch<React.SetStateAction<boolean>>;
+    shareManyLink: string;
+    setShareManyLink: React.Dispatch<React.SetStateAction<string>>;
+    baseShareManyLink: string;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -54,6 +59,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [token, setToken] = useState<string>("");
     const [selectActive, setSelectActive] = useState<boolean>(false);
     const [selected, setSelected] = useState<string[]>([]);
+    const [shareMany, setShareMany] = useState<boolean>(false);
+    const [shareManyLink, setShareManyLink] = useState<string>("");
 
     useEffect(() => {
         if(selected.length === 0) {
@@ -62,6 +69,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }, [selected]);
 
     const baseShareLink = "https://duobrain.vercel.app/share/brain/";
+    const baseShareManyLink = "https://duobrain.vercel.app/share/brain/selected/";
 
     return (
         <AppContext.Provider value={{
@@ -95,7 +103,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             selectActive,
             setSelectActive,
             selected,
-            setSelected
+            setSelected,
+            shareMany,
+            setShareMany,
+            shareManyLink,
+            setShareManyLink,
+            baseShareManyLink
         }}>
             {children}
         </AppContext.Provider>

@@ -406,7 +406,7 @@ app.post('/api/v1/brain/share/selected', auth, async (req, res) => {
 			}, JWT_SECRET, {
 				expiresIn: "30d"
 			});
-			user.shareableLinkSome = "http://localhost:5000/api/v1/brain/newron/"+shareParam;
+			user.shareableLinkSome = shareParam;
 			await user.save();
 			res.status(200).json({
 				message: "Share status updated successfully",
@@ -451,7 +451,7 @@ app.get('/api/v1/brain/selected/:shareLink', async (req, res) => {
 			});
 			return;
 		}
-		if("http://localhost:5000/api/v1/brain/newron/"+shareLink !== user.shareableLinkSome){
+		if(shareLink !== user.shareableLinkSome){
 			res.status(403).json({
 				message: "Link expired"
 			});

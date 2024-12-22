@@ -14,6 +14,7 @@ import SkeletonCard from "./SkeletonCard";
 import { DeleteIcon } from "@/app/_icons/DeleteIcon";
 import { CrossIcon } from "@/app/_icons/CrossIcon";
 import DeleteModalSelected from "./DeletedSelectedModal";
+import ShareManyModal from "./ShareManyModal";
 
 interface dateType {
 	day: string;
@@ -137,10 +138,6 @@ export default function Hero() {
 		}
 	}
 
-	async function shareMany() : Promise<number> {
-		
-	}
-
 	return (
 		<div className="bg-background min-h-screen h-auto w-full ml-0 xs:ml-[96px] lg:ml-[300px]">
 			<div className="xxs:p-10 p-5">
@@ -175,7 +172,10 @@ export default function Hero() {
 								setSelectActive(false);
 								setSelected([]);
 							}} text="Cancel" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
-							<Button text="Share" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
+							<Button onClick={()=>{
+								setModalComponent(<ShareManyModal/>)
+								setModalOpen(true);
+							}} text="Share" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
 							<Button onClick={()=>{
 								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
 								setModalOpen(true);
@@ -208,7 +208,10 @@ export default function Hero() {
 								setSelectActive(false);
 								setSelected([]);
 							}} text="" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
-							<Button text="" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
+							<Button onClick={()=>{
+								setModalComponent(<ShareManyModal/>)
+								setModalOpen(true)
+							}} text="" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
 							<Button onClick={()=>{
 								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
 								setModalOpen(true);
@@ -231,7 +234,10 @@ export default function Hero() {
 								setSelectActive(false);
 								setSelected([]);
 							}} text="" variant="none" size="square-md" startIcon={<CrossIcon size="md"/>}/>
-							<Button text="" variant="primary" size="square-md" startIcon={<ShareIcon size="md" />}/>
+							<Button onClick={()=>{
+								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
+								setModalOpen(true);
+							}} text="" variant="primary" size="square-md" startIcon={<ShareIcon size="md" />}/>
 							<Button onClick={()=>{
 								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
 								setModalOpen(true);
