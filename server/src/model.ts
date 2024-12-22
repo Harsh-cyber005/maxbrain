@@ -21,6 +21,24 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
+    initial: {
+        type: String,
+        required: true
+    },
+    colors:{
+        type: {
+            from: { type: String, required: true },
+            to: { type: String, required: true }
+        },
+        default: {
+            from: "#000000",
+            to: "#000000"
+        }
+    },
     token: {
         type: String
     },

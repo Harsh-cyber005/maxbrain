@@ -16,6 +16,9 @@ const Signup = () => {
     const [emptyUsernamePrompt, setEmptyUsernamePrompt] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(true);
     const [emptyPasswordPrompt, setEmptyPasswordPrompt] = useState(false);
+    const [email, setEmail] = useState('');
+    const [emptyEmail, setEmptyEmail] = useState(true);
+    const [emptyEmailPrompt, setEmptyEmailPrompt] = useState(false);
 
     const {setAuthName} = useAppContext();
 
@@ -28,13 +31,42 @@ const Signup = () => {
             setEmptyUsernamePrompt(true);
             if(passwordEmpty) {
                 setEmptyPasswordPrompt(true);
+                if(emptyEmail) {
+                    setEmptyEmailPrompt(true);
+                }
+            }
+            if(emptyEmail) {
+                setEmptyEmailPrompt(true);
             }
             return;
         }
         if(passwordEmpty) {
             setEmptyPasswordPrompt(true);
+            if(usernameEmpty) {
+                setEmptyUsernamePrompt(true);
+                if(emptyEmail) {
+                    setEmptyEmailPrompt(true);
+                }
+            }
+            if(emptyEmail) {
+                setEmptyEmailPrompt(true);
+            }
             return;
         }
+        if(emptyEmail) {
+            setEmptyEmailPrompt(true);
+            if(usernameEmpty) {
+                setEmptyUsernamePrompt(true);
+                if(passwordEmpty) {
+                    setEmptyPasswordPrompt(true);
+                }
+            }
+            if(passwordEmpty) {
+                setEmptyPasswordPrompt(true);
+            }
+            return;
+        }
+
         try{
             setLoading(true);
             const response = await axios.post('/signup', {
@@ -83,6 +115,15 @@ const Signup = () => {
         }
     },[password]);
 
+    useEffect(() => {
+        if (email.length > 0) {
+            setEmptyEmail(false);
+            setEmptyEmailPrompt(false);
+        } else {
+            setEmptyEmail(true);
+        }
+    },[email]);
+
     return (
         <div className="flex flex-col md:flex-row justify-center items-center min-h-[1000px] md:min-h-screen h-screen bg-[#F3F3F5]">
             <div className="md:w-[50%] h-full w-full">
@@ -90,38 +131,52 @@ const Signup = () => {
             </div>
             <div className="flex items-center justify-center md:w-[50%] w-full h-full md:h-full">
                 <div className="w-full max-w-[20rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-                    <h2 className="text-2xl font-bold text-center text-gray-800">Create a New Account !</h2>
-                    <div>
-                        <label htmlFor="username">Username</label>
-                        <input
-                            type="text"
-                            name='username'
-                            id='username'
-                            value={username}
-                            placeholder={emptyUsernamePrompt?"Please Enter the username":'Enter your username'}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className={`w-full border p-2 rounded-md ${emptyUsernamePrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            name='password'
-                            id='password'
-                            value={password}
-                            placeholder={emptyPasswordPrompt?"Please Enter the password":'Enter your password'}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className={`w-full border p-2 rounded-md ${emptyPasswordPrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
-                        />
-                    </div>
-                    <Button loading={loading} onClick={() => {
-                        handleSignup();
-                    }} text='Sign up' size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />
-                    <div>
-                        <p className="text-center text-gray-600">Already have an account? <span onClick={()=>{
-                            router.replace('/auth/login');
-                        }} className="text-blue-600 cursor-pointer hover:text-blue-950">Sign In</span></p>
+                    <div className='w-full space-y-6 border'>
+                        <h2 className="text-2xl font-bold text-center text-gray-800">Create a New Account !</h2>
+                        <div>
+                            <label htmlFor="username">Username</label>
+                            <input
+                                type="text"
+                                name='username'
+                                id='username'
+                                value={username}
+                                placeholder={emptyUsernamePrompt?"Please Enter the username":'Enter your username'}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className={`w-full border p-2 rounded-md ${emptyUsernamePrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                name='email'
+                                id='email'
+                                value={email}
+                                placeholder={emptyEmailPrompt?"Please Enter the email":'Enter your email'}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className={`w-full border p-2 rounded-md ${emptyEmailPrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password">Password</label>
+                            <input
+                                type="password"
+                                name='password'
+                                id='password'
+                                value={password}
+                                placeholder={emptyPasswordPrompt?"Please Enter the password":'Enter your password'}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className={`w-full border p-2 rounded-md ${emptyPasswordPrompt?'border-red-500 placeholder-red-500':'placeholder-gray-400 border-gray-300'}`}
+                            />
+                        </div>
+                        <Button loading={loading} onClick={() => {
+                            handleSignup();
+                        }} text='Send OTP' size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />
+                        <div>
+                            <p className="text-center text-gray-600">Already have an account? <span onClick={()=>{
+                                router.replace('/auth/login');
+                            }} className="text-blue-600 cursor-pointer hover:text-blue-950">Sign In</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
