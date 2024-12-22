@@ -14,6 +14,15 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+let OTP: string = "";
+
+function checkOTP(sent: string): boolean{
+	if(sent === OTP){
+		return true;
+	}
+	return false;
+}
+
 const tailwindColors = [
 	'#f87171', // red-500
 	'#fbbf24', // yellow-500
@@ -52,7 +61,8 @@ app.post('/api/v1/signup', async (req, res) => {
 			.max(50, "password must be atmost 50 characters long"),
 		email: z
 			.string()
-			.email("Invalid email")
+			.email("Invalid email"),
+		otp: z.string()
 	});
 	const parsedDataWithSuccess = requiredBody.safeParse(req.body);
 	if (!parsedDataWithSuccess.success) {
@@ -65,6 +75,13 @@ app.post('/api/v1/signup', async (req, res) => {
 	const username: string = req.body.username;
 	const password: string = req.body.password;
 	const email: string = req.body.email
+	const otp: string = req.body.otp;
+	if(!checkOTP(otp)){
+		res.status(403).json({
+			message: "Invalid OTP"
+		});
+		return;
+	}
 	const userExists = await UserModel.findOne({ username: username });
 	if (userExists) {
 		res.status(403).json({
@@ -116,6 +133,7 @@ app.post('/api/v1/email', async (req, res) => {
 		const userName: string = req.body.userName;
 		const otp = Math.floor(100000 + Math.random() * 900000).toString();
 		const mail_res = await Mail({ emailAddress, userName, otp });
+		OTP = otp;
 		if (mail_res.error) {
 			res.status(500).json({
 				message: 'Failed to process email',
@@ -125,8 +143,7 @@ app.post('/api/v1/email', async (req, res) => {
 			return;
 		}
 		res.status(200).json({
-			message: "Email sent successfully",
-			otp: otp
+			message: "Email sent successfully"
 		});
 	} catch (error) {
 		console.error(error);

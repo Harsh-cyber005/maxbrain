@@ -25,13 +25,12 @@ const Signup = () => {
 
     const [otpSent, setOtpSent] = useState(false);
 
-    const [recievedOtp, setRecievedOtp] = useState('');
-
     const { setAuthName } = useAppContext();
 
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
+    const [loadingOtp, setLoadingOtp] = useState(false);
 
     async function handleSendOtp() {
         if (usernameEmpty) {
@@ -74,7 +73,7 @@ const Signup = () => {
             return;
         }
         try {
-            setLoading(true);
+            setLoadingOtp(true);
             const response = await axios.post('/email', {
                 emailAddress: email,
                 userName: username
@@ -82,23 +81,22 @@ const Signup = () => {
             const data = response.data;
             if (response.status === 200) {
                 toast.success('OTP sent successfully');
-                setRecievedOtp(data.otp);
             } else {
                 toast.error(data.message);
             }
-            setLoading(false);
+            setLoadingOtp(false);
             setOtpSent(true);
         } catch (error) {
             console.log(error);
             toast.error('Something went wrong');
-            setLoading(false);
+            setLoadingOtp(false);
             return;
         }
     }
 
     async function handleSignup() {
-        if (recievedOtp !== otp || emptyOtp) {
-            toast.error('Invalid OTP');
+        if(emptyOtp) {
+            setEmptyOtpPrompt(true);
             return;
         }
         if (usernameEmpty) {
@@ -145,7 +143,8 @@ const Signup = () => {
             const response = await axios.post('/signup', {
                 username,
                 password,
-                email
+                email,
+                otp
             });
             const data = response.data;
             if (response.status === 200) {
@@ -265,7 +264,7 @@ const Signup = () => {
                             />
                         </div>}
                         <div className='flex lg:flex-row flex-col gap-2'>
-                            <Button loading={loading} onClick={() => {
+                            <Button loading={loadingOtp} onClick={() => {
                                 handleSendOtp();
                             }} text={otpSent?"Resend OTP":'Send OTP'} size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />
                             {otpSent && <Button loading={loading} onClick={() => {
