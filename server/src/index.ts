@@ -125,6 +125,8 @@ app.get('/api/v1/user', auth, async (req, res) => {
 			username: user.username,
 			share: user.share,
 			shareLink: user.shareableLink,
+			shareSome: user.shareSome,
+			shareLinkSome: user.shareableLinkSome
 		});
 	} catch (e) {
 		res.status(500).json({

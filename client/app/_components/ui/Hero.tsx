@@ -15,6 +15,7 @@ import { DeleteIcon } from "@/app/_icons/DeleteIcon";
 import { CrossIcon } from "@/app/_icons/CrossIcon";
 import DeleteModalSelected from "./DeletedSelectedModal";
 import ShareManyModal from "./ShareManyModal";
+import toast from "react-hot-toast";
 
 interface dateType {
 	day: string;
@@ -38,7 +39,7 @@ const dummy = [
 
 export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
-	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey } = useAppContext();
+	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
@@ -70,6 +71,8 @@ export default function Hero() {
 			setShare(response.data.share);
 			setAuthName(response.data.username);
 			setShareLink(baseShareLink + response.data.shareLink);
+			setShareMany(response.data.shareSome);
+			setShareManyLink(baseShareLink + response.data.shareLinkSome);
 		} catch (error) {
 			console.log(error);
 		}
@@ -173,6 +176,9 @@ export default function Hero() {
 								setSelected([]);
 							}} text="Cancel" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
 							<Button onClick={()=>{
+								if(shareMany){
+									toast.loading('Contents are already being shared', {duration: 2000})
+								}
 								setModalComponent(<ShareManyModal/>)
 								setModalOpen(true);
 							}} text="Share" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
@@ -209,6 +215,9 @@ export default function Hero() {
 								setSelected([]);
 							}} text="" variant="none" size="md" startIcon={<CrossIcon size="md"/>}/>
 							<Button onClick={()=>{
+								if(shareMany){
+									toast.loading('Contents are already being shared', {duration: 2000})
+								}
 								setModalComponent(<ShareManyModal/>)
 								setModalOpen(true)
 							}} text="" variant="primary" size="md" startIcon={<ShareIcon size="md" />}/>
@@ -235,7 +244,10 @@ export default function Hero() {
 								setSelected([]);
 							}} text="" variant="none" size="square-md" startIcon={<CrossIcon size="md"/>}/>
 							<Button onClick={()=>{
-								setModalComponent(<DeleteModalSelected deleteSelected={deleteSelected}/>);
+								if(shareMany){
+									toast.loading('Contents are already being shared', {duration: 2000})
+								}
+								setModalComponent(<ShareManyModal/>);
 								setModalOpen(true);
 							}} text="" variant="primary" size="square-md" startIcon={<ShareIcon size="md" />}/>
 							<Button onClick={()=>{
