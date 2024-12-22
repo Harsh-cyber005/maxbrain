@@ -109,7 +109,7 @@ export default function ShareHero() {
                     <div className="flex justify-between items-center pb-10">
                         {
                             loading &&
-                            <div className="flex items-center justify-center text-[#5046E4]">
+                            <div className="items-center justify-center text-[#5046E4] hidden xs:flex">
                                 <h1 className="text-2xl font-bold md:flex hidden mr-5">Loading...</h1>
                                 <Loader2 className="animate-spin stroke-2 size-6" />
                             </div>

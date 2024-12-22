@@ -356,7 +356,7 @@ app.get('/api/v1/brain/:shareLink', async (req, res) => {
 	}
 });
 
-app.post('/api/v1/brain/newron/share', auth, async (req, res) => {
+app.post('/api/v1/brain/share/selected', auth, async (req, res) => {
 	const requiredBody = z.object({
 		share: z.boolean(),
 		contentids: z.array(z.string()),
@@ -415,6 +415,11 @@ app.post('/api/v1/brain/newron/share', auth, async (req, res) => {
 		} else {
 			user.shareableLinkSome = "";
 			await user.save();
+			const contents = await ContentModel.find({visibility: "public", userId: userid});
+			for(let i=0; i<contents.length; i++){
+				contents[i].visibility = "private";
+				await contents[i].save();
+			}
 			res.status(200).json({
 				message: "Share status updated successfully"
 			});
@@ -428,7 +433,7 @@ app.post('/api/v1/brain/newron/share', auth, async (req, res) => {
 	}
 });
 
-app.get('/api/v1/brain/newron/:shareLink', async (req, res) => {
+app.get('/api/v1/brain/selected/:shareLink', async (req, res) => {
 	try{
 		const shareLink = req.params.shareLink;
 		const decoded = jwt.verify(shareLink, JWT_SECRET);

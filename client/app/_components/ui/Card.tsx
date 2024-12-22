@@ -78,7 +78,7 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
             }
         }} style={{
             '--random-delay': `${Math.random() * 0.3}s`
-        } as React.CSSProperties} className={`${selected?"bg-gray-50":"bg-white hover:bg-gray-50"} rounded-md  border-gray-200 border-2 border-solid w-[310px] p-5 flex flex-col gap-5 h-[450px] shadow-lg ${selectActive? !selected? "":"shiver" :""} text-base`}>
+        } as React.CSSProperties} className={`${selected?"bg-gray-50":"bg-white hover:bg-gray-50"} rounded-md  border-gray-200 border-2 border-solid w-[310px] p-5 flex flex-col gap-5 h-[450px] shadow-lg ${selectActive? !selected? "":"shiver" :""} overflow-y-scroll overflow-x-hidden tweet-scroll`}>
             <div className='w-full flex flex-col gap-5 h-[359px]'>
                 <div className={shared ? "flex items-center justify-start h-[24px]" : "flex items-center justify-between h-[24px]"}>
                     <div className='flex w-[40px] justify-start items-center'>

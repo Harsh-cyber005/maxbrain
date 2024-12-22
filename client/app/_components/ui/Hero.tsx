@@ -137,6 +137,10 @@ export default function Hero() {
 		}
 	}
 
+	async function shareMany() : Promise<number> {
+		
+	}
+
 	return (
 		<div className="bg-background min-h-screen h-auto w-full ml-0 xs:ml-[96px] lg:ml-[300px]">
 			<div className="xxs:p-10 p-5">
