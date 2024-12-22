@@ -23,11 +23,9 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
     },
     initial: {
         type: String,
-        required: true
     },
     colors:{
         type: {

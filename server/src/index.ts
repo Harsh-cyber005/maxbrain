@@ -7,6 +7,7 @@ import { JWT_SECRET } from './config';
 import { auth } from './middleware';
 import cors from 'cors';
 import { Mail } from './emailer';
+import { error } from 'console';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -182,7 +183,8 @@ app.post('/api/v1/signin', async (req, res) => {
 		});
 	} catch (e) {
 		res.status(500).json({
-			message: "Internal server error"
+			message: "Internal server error",
+			error: e
 		});
 		return;
 	}
