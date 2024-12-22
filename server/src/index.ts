@@ -7,7 +7,6 @@ import { JWT_SECRET } from './config';
 import { auth } from './middleware';
 import cors from 'cors';
 import { Mail } from './emailer';
-import { error } from 'console';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,7 +35,6 @@ const tailwindColors = [
 	'#737373', // neutral-500
 	'#737373', // stone-500
 ];
-
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');

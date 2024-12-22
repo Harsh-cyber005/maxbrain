@@ -208,14 +208,14 @@ const Signup = () => {
     }, [otp]);
 
     return (
-        <div className="flex flex-col md:flex-row justify-center items-center min-h-[1000px] md:min-h-screen h-screen bg-[#F3F3F5]">
+        <div className="flex flex-col md:flex-row justify-center items-center md:min-h-screen md:h-screen h-max bg-[#F3F3F5]">
             <div className="md:w-[50%] h-full w-full">
                 <Image src='/authwall.jpg' className='h-full w-full object-cover' alt='login' width={1920} height={1080} />
             </div>
-            <div className="flex items-center justify-center md:w-[50%] w-full h-full md:h-full ">
-                <div className={`w-full max-w-[20rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md flex`}>
+            <div className="flex items-center justify-center md:w-[50%] w-full h-max md:h-full py-20 md:py-0">
+                <div className={`w-full max-w-[30rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md flex`}>
                     <div className='min-w-full space-y-6 '>
-                        <h2 className="text-2xl font-bold text-center text-gray-800">Create a New Account !</h2>
+                        <h2 className="text-xl font-bold text-center text-gray-800">Create a New Account</h2>
                         <div>
                             <label htmlFor="username">Username</label>
                             <input
@@ -264,13 +264,13 @@ const Signup = () => {
                                 className={`w-full border p-2 rounded-md ${emptyOtpPrompt ? 'border-red-500 placeholder-red-500' : 'placeholder-gray-400 border-gray-300'}`}
                             />
                         </div>}
-                        <div className='flex gap-2'>
+                        <div className='flex lg:flex-row flex-col gap-2'>
                             <Button loading={loading} onClick={() => {
                                 handleSendOtp();
-                            }} text='Send OTP' size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />
+                            }} text={otpSent?"Resend OTP":'Send OTP'} size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />
                             {otpSent && <Button loading={loading} onClick={() => {
                                 handleSignup();
-                            }} text='Sign Up' size='md' width='w-full' variant='primary' startIcon={<LoginIcon size='md' />} />}
+                            }} text='Sign Up' size='md' width='w-full' variant='secondary' startIcon={<LoginIcon size='md' />} />}
                         </div>
                         <div>
                             <p className="text-center text-gray-600">Already have an account? <span onClick={() => {
