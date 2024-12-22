@@ -39,7 +39,7 @@ const dummy = [
 
 export default function Hero() {
 	const [data, setData] = useState<dataType[]>([]);
-	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink } = useAppContext();
+	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink, baseShareManyLink } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
@@ -72,7 +72,7 @@ export default function Hero() {
 			setAuthName(response.data.username);
 			setShareLink(baseShareLink + response.data.shareLink);
 			setShareMany(response.data.shareSome);
-			setShareManyLink(baseShareLink + response.data.shareLinkSome);
+			setShareManyLink(baseShareManyLink + response.data.shareLinkSome);
 		} catch (error) {
 			console.log(error);
 		}

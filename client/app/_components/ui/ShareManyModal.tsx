@@ -62,7 +62,7 @@ function ShareManyModal() {
     return (
         <div className='bg-white p-5 mx-5 rounded-lg text-text max-w-[400px] flex flex-col gap-4'>
             <div className='flex justify-between items-center'>
-                <h1 className='text-lg font-semibold'>Share Item</h1>
+                <h1 className='text-lg font-semibold'>Share Contents </h1>
                 <div className='flex justify-center items-center cursor-pointer' onClick={() => {
                     setModalComponent(null);
                     setModalOpen(false);
@@ -80,7 +80,7 @@ function ShareManyModal() {
             {
                 !shareMany &&
                 <div className='flex gap-2'>
-                    <Button loading={loading} onClick={startShareMany} variant='primary' size='md' text="Share Brain" startIcon={<ShareIcon size='md'/>} width='w-full'/>
+                    <Button loading={loading} onClick={startShareMany} variant='primary' size='md' text="Share Contents" startIcon={<ShareIcon size='md'/>} width='w-full'/>
                 </div>
             }
             {

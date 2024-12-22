@@ -9,8 +9,9 @@ import { ShareIcon } from '@/app/_icons/ShareIcon';
 import { StopIcon } from '@/app/_icons/StopIcon';
 
 function ShareModal() {
-    const { setModalOpen, totalContent, setModalComponent, share, setShare, baseShareLink, setShareLink, shareLink } = useAppContext();
+    const { setModalOpen, totalContent, setModalComponent, share, setShare, baseShareLink, setShareLink, shareLink, shareMany, shareManyLink, selected, setShareMany, setShareManyLink } = useAppContext();
     const [loading, setLoading] = React.useState(false);
+    const [loadingMany, setLoadingMany] = React.useState(false);
 
     async function shareBrain() {
         try {
@@ -56,6 +57,30 @@ function ShareModal() {
             toast.error('Failed to Stop Sharing Brain');
         }
     }
+
+    async function stopShareMany(){
+		try {
+            setLoadingMany(true);
+			await axios.post('/brain/share/selected', {
+				contentids: selected,
+				share: false
+			},{
+				headers: {
+					'Authorization': localStorage.getItem('token')
+				}
+			})
+            setLoadingMany(false);
+            setShareMany(false);
+            setShareManyLink('');
+            toast.success('Contents Sharing Stopped Successfully');
+		} catch (error) {
+			console.log(error);
+            setLoadingMany(false);
+            setShareMany(true);
+            toast.error('Failed to Stop Sharing Contents');
+		}
+	}
+
     return (
         <div className='bg-white p-5 mx-5 rounded-lg text-text max-w-[400px] flex flex-col gap-4'>
             <div className='flex justify-between items-center'>
@@ -94,12 +119,29 @@ function ShareModal() {
                     }} variant='secondary' size='md' startIcon={<CopyIcon size='md'/>} width='w-max flex xs:hidden'/>
                 </div>
             }
-            {/* <div>
-                <Button variant='secondary' size='md' text="Share a Part of Brain (Under Development)" startIcon={<CopyIcon size='md'/>} width='w-full'/>
-            </div> */}
             <div className='flex justify-center items-center'>
                 <p className='text-sm text-gray-600'>{totalContent} {share?"Items are being shared":"Items will be shared"}</p>
             </div>
+            {
+                shareMany &&
+                <div className='flex flex-col gap-2'>
+                    <div className='text-sm text-gray-700'>
+                        Some Contents are being shared
+                    </div>
+                    <div className='flex gap-2'>
+                        <Button loading={loadingMany} onClick={stopShareMany} variant='danger' size='md' text="Stop Sharing" startIcon={<StopIcon size='md'/>} width='w-full'/>
+                        <Button onClick={async ()=>{
+                            await navigator.clipboard.writeText(shareManyLink);
+                            toast.success('Link Copied to Clipboard');
+                        }} variant='secondary' size='md' text="Copy Link" startIcon={<CopyIcon size='md'/>} width='w-full xs:flex hidden'/>
+                        <Button onClick={async ()=>{
+                            console.log(shareManyLink);
+                            await navigator.clipboard.writeText(shareManyLink);
+                            toast.success('Link Copied to Clipboard');
+                        }} variant='secondary' size='md' startIcon={<CopyIcon size='md'/>} width='w-max flex xs:hidden'/>
+                    </div>
+                </div>
+            }
         </div>
     )
 }

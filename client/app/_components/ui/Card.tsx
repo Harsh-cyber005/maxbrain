@@ -16,6 +16,7 @@ import CardDescription from './CardDescription'
 import { MenuIcon } from '@/app/_icons/MenuIcon'
 import { SelectIcon } from '@/app/_icons/SelectIcon'
 import { ShareIcon } from '@/app/_icons/ShareIcon'
+import ShareManyModal from './ShareManyModal'
 
 interface dateType {
     day: string;
@@ -128,7 +129,14 @@ function Card({ id, title, link, type, content, tags, date, deleteCard, shared, 
                                     <SelectIcon size='md' />
                                     select
                                 </div>
-                                <div className='cursor-pointer px-4 py-2 w-[150px] rounded-b-md hover:bg-secondaryBtn duration-150 flex justify-start items-center gap-2'>
+                                <div onClick={(e)=>{
+                                    e.stopPropagation();
+                                    handleToggleIncludeInSelected();
+                                    setSelectActive(true);
+                                    setShowDropdown(false);
+                                    setModalComponent(<ShareManyModal/>);
+                                    setModalOpen(true);
+                                }} className='cursor-pointer px-4 py-2 w-[150px] rounded-b-md hover:bg-secondaryBtn duration-150 flex justify-start items-center gap-2'>
                                     <ShareIcon size='md' />
                                     share
                                 </div>
