@@ -106,7 +106,7 @@ const Signin = () => {
                 <Image src='/authwall.jpg' className='h-full w-full object-cover' alt='login' width={1920} height={1080} />
             </div>
             <div className="flex items-center justify-center md:w-[50%] w-full h-full md:h-full">
-                <div className="w-full max-w-[30rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+                <div className="w-full max-w-[30rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md mx-10">
                     <h2 className="text-2xl font-bold text-center text-gray-800">Welcome Back !</h2>
                     <div>
                         <label htmlFor="username">Username</label>

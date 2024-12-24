@@ -89,6 +89,13 @@ app.post('/api/v1/signup', async (req, res) => {
 		});
 		return;
 	}
+	const emailExists = await UserModel.findOne({ email: email });
+	if (emailExists) {
+		res.status(403).json({
+			message: "Email already exists"
+		});
+		return;
+	}
 	try {
 		const hashedPassword = await bcrypt.hash(password, 5);
 		const initial = username[0].toUpperCase();
@@ -131,6 +138,13 @@ app.post('/api/v1/email', async (req, res) => {
 		}
 		const emailAddress: string = req.body.emailAddress;
 		const userName: string = req.body.userName;
+		const emailExists = await UserModel.findOne({ email: emailAddress });
+		if (!emailExists) {
+			res.status(403).json({
+				message: "Email does not exist"
+			});
+			return;
+		}
 		const otp = Math.floor(100000 + Math.random() * 900000).toString();
 		const mail_res = await Mail({ emailAddress, userName, otp });
 		OTP = otp;

@@ -39,6 +39,12 @@ interface AppContextType {
     shareManyLink: string;
     setShareManyLink: React.Dispatch<React.SetStateAction<string>>;
     baseShareManyLink: string;
+    initial: string;
+    setInitial: React.Dispatch<React.SetStateAction<string>>;   
+    fromColor: string;
+    setFromColor: React.Dispatch<React.SetStateAction<string>>;
+    toColor: string;
+    setToColor: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -61,6 +67,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [selected, setSelected] = useState<string[]>([]);
     const [shareMany, setShareMany] = useState<boolean>(false);
     const [shareManyLink, setShareManyLink] = useState<string>("");
+    const [initial, setInitial] = useState<string>("");
+    const [fromColor, setFromColor] = useState<string>("");
+    const [toColor, setToColor] = useState<string>("");
 
     useEffect(() => {
         if(selected.length === 0) {
@@ -108,7 +117,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             setShareMany,
             shareManyLink,
             setShareManyLink,
-            baseShareManyLink
+            baseShareManyLink,
+            initial,
+            setInitial,
+            fromColor,
+            setFromColor,
+            toColor,
+            setToColor
         }}>
             {children}
         </AppContext.Provider>

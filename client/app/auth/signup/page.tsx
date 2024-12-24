@@ -211,8 +211,8 @@ const Signup = () => {
             <div className="md:w-[50%] h-full w-full">
                 <Image src='/authwall.jpg' className='h-full w-full object-cover' alt='login' width={1920} height={1080} />
             </div>
-            <div className="flex items-center justify-center md:w-[50%] w-full h-max md:h-full py-20 md:py-0">
-                <div className={`w-full max-w-[30rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md flex`}>
+            <div className="flex items-center justify-center md:w-[50%] w-full h-full md:h-full py-20 md:py-0">
+                <div className={`w-full max-w-[30rem] lg:max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md flex mx-10`}>
                     <div className='min-w-full space-y-6 '>
                         <h2 className="text-xl font-bold text-center text-gray-800">Create a New Account</h2>
                         <div>
