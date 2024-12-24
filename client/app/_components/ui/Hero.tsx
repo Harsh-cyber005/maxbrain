@@ -16,7 +16,7 @@ import { CrossIcon } from "@/app/_icons/CrossIcon";
 import DeleteModalSelected from "./DeletedSelectedModal";
 import ShareManyModal from "./ShareManyModal";
 import toast from "react-hot-toast";
-import ProfileIcon from "./ProfileIcon";
+// import ProfileIcon from "./ProfileIcon";
 
 interface dateType {
 	day: string;
