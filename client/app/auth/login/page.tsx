@@ -42,7 +42,7 @@ const Signin = () => {
                 password
             });
             const data = response.data;
-            if (response.status === 200) {
+            if (data.actualCode === 200) {
                 if(typeof window === 'undefined') return;
                 toast.success('Signed in successfully');
                 localStorage.setItem('token', data.token);

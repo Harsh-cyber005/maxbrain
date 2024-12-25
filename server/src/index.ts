@@ -8,6 +8,7 @@ import { auth } from './middleware';
 import cors from 'cors';
 import { Mail } from './emailer';
 import { v4 as UUID } from 'uuid';
+import { access } from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -67,8 +68,9 @@ app.post('/api/v1/signup', async (req, res) => {
 	});
 	const parsedDataWithSuccess = requiredBody.safeParse(req.body);
 	if (!parsedDataWithSuccess.success) {
-		res.status(411).json({
+		res.status(200).json({
 			message: "Invalid input, provide valid email, name and password",
+			actualCode: 411,
 			error: parsedDataWithSuccess.error.issues
 		});
 		return;
@@ -78,22 +80,25 @@ app.post('/api/v1/signup', async (req, res) => {
 	const email: string = req.body.email
 	const otp: string = req.body.otp;
 	if(!checkOTP(otp)){
-		res.status(403).json({
-			message: "Invalid OTP"
+		res.status(200).json({
+			message: "Invalid OTP",
+			actualCode: 403
 		});
 		return;
 	}
 	const userExists = await UserModel.findOne({ username: username });
 	if (userExists) {
-		res.status(403).json({
-			message: "User Already exists"
+		res.status(200).json({
+			message: "User Already exists",
+			actualCode: 403
 		});
 		return;
 	}
 	const emailExists = await UserModel.findOne({ email: email });
 	if (emailExists) {
-		res.status(403).json({
-			message: "Email already exists"
+		res.status(200).json({
+			message: "Email already exists",
+			actualCode: 403
 		});
 		return;
 	}
@@ -114,11 +119,13 @@ app.post('/api/v1/signup', async (req, res) => {
 		});
 		await user.save();
 		res.status(200).json({
-			message: "Signed up successfully"
+			message: "Signed up successfully",
+			actualCode: 200
 		});
 	} catch (e) {
-		res.status(500).json({
-			message: "Internal server error"
+		res.status(200).json({
+			message: "Internal server error",
+			actualCode: 500,
 		})
 	}
 });
@@ -126,13 +133,15 @@ app.post('/api/v1/signup', async (req, res) => {
 app.post('/api/v1/email', async (req, res) => {
 	try {
 		const requiredBody = z.object({
-			emailAddress: z.string(),
-			userName: z.string()
+			emailAddress: z.string().email("Invalid email"),
+			userName: z.string().min(3, "username must be atleast 3 characters long").max(50, "username must be atmost 50 characters long")
 		})
 		const parsedDataWithSuccess = requiredBody.safeParse(req.body);
 		if (!parsedDataWithSuccess.success) {
-			res.status(411).json({
-				message: "Invalid input, provide valid email and name",
+			const majorIssue = (parsedDataWithSuccess.error.issues[0].message);
+			res.status(200).json({
+				message: majorIssue,
+				actualCode: 411,
 				error: parsedDataWithSuccess.error.issues
 			});
 			return;
@@ -140,9 +149,10 @@ app.post('/api/v1/email', async (req, res) => {
 		const emailAddress: string = req.body.emailAddress;
 		const userName: string = req.body.userName;
 		const emailExists = await UserModel.findOne({ email: emailAddress });
-		if (!emailExists) {
-			res.status(403).json({
-				message: "Email does not exist"
+		if (emailExists) {
+			res.status(200).json({
+				message: "Email already exists",
+				actualCode: 403
 			});
 			return;
 		}
@@ -150,20 +160,23 @@ app.post('/api/v1/email', async (req, res) => {
 		const mail_res = await Mail({ emailAddress, userName, otp });
 		OTP = otp;
 		if (mail_res.error) {
-			res.status(500).json({
+			res.status(200).json({
 				message: 'Failed to process email',
 				email: "Mail not sent",
+				actualCode: 500,
 				error: mail_res.error
 			});
 			return;
 		}
 		res.status(200).json({
-			message: "Email sent successfully"
+			message: "Email sent successfully",
+			actualCode: 200
 		});
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({
+		res.status(200).json({
 			message: 'Failed to process email',
+			actualCode: 500,
 			error: (error as Error).message
 		});
 		return;
@@ -177,8 +190,9 @@ app.post('/api/v1/signin', async (req, res) => {
 	});
 	const parsedDataWithSuccess = requiredBody.safeParse(req.body);
 	if (!parsedDataWithSuccess.success) {
-		res.status(411).json({
+		res.status(200).json({
 			message: "Invalid input, provide valid email, name and password",
+			actualCode: 411,
 			error: parsedDataWithSuccess.error.issues
 		});
 		return;
@@ -187,16 +201,18 @@ app.post('/api/v1/signin', async (req, res) => {
 	const password: string = req.body.password
 	const user = await UserModel.findOne({ username: username });
 	if (!user) {
-		res.status(403).json({
-			message: "user does not exist"
+		res.status(200).json({
+			message: "user does not exist",
+			actualCode: 403
 		});
 		return;
 	}
 	try {
 		const passwordMatch = await bcrypt.compare(password, user.password);
 		if (!passwordMatch) {
-			res.status(403).json({
-				message: "Invalid password"
+			res.status(200).json({
+				message: "Invalid password",
+				actualCode: 403
 			});
 			return;
 		}
@@ -209,11 +225,13 @@ app.post('/api/v1/signin', async (req, res) => {
 		await user.save();
 		res.status(200).json({
 			message: "Signed in successfully",
+			actualCode: 200,
 			token: token
 		});
 	} catch (e) {
-		res.status(500).json({
+		res.status(200).json({
 			message: "Internal server error",
+			actualCode: 500,
 			error: e
 		});
 		return;

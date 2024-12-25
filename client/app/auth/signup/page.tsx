@@ -79,13 +79,13 @@ const Signup = () => {
                 userName: username
             });
             const data = response.data;
-            if (response.status === 200) {
+            if (data.actualCode === 200) {
                 toast.success('OTP sent successfully');
+                setOtpSent(true);
             } else {
                 toast.error(data.message);
             }
             setLoadingOtp(false);
-            setOtpSent(true);
         } catch (error) {
             console.log(error);
             toast.error('Something went wrong');
