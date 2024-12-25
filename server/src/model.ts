@@ -102,5 +102,18 @@ const ContentSchema = new Schema({
     }
 })
 
+const ShareLinkSchema = new Schema({
+    shortLink: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+});
+
 export const UserModel = model('User', UserSchema);
 export const ContentModel = model('Content', ContentSchema);
+export const ShareLinkModel = model('ShareLink', ShareLinkSchema);

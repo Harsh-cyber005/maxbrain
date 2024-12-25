@@ -2,11 +2,12 @@ import express from 'express';
 import jwt from "jsonwebtoken";
 import z from "zod";
 import bcrypt from "bcryptjs";
-import { UserModel, ContentModel } from './model';
+import { UserModel, ContentModel, ShareLinkModel } from './model';
 import { JWT_SECRET } from './config';
 import { auth } from './middleware';
 import cors from 'cors';
 import { Mail } from './emailer';
+import { v4 as UUID } from 'uuid';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -397,18 +398,19 @@ app.post('/api/v1/brain/share', auth, async (req, res) => {
 		user.share = share;
 		await user.save();
 		if (share) {
-			const shareParam = jwt.sign({
-				userid: user._id
-			}, JWT_SECRET, {
-				expiresIn: "30d"
+			const shortID = UUID();
+			await ShareLinkModel.create({
+				shortLink: shortID,
+				userId: user._id
 			});
-			user.shareableLink = shareParam;
+			user.shareableLink = shortID;
 			await user.save();
 			res.status(200).json({
 				message: "Share status updated successfully",
 				shareableLink: user.shareableLink
 			});
 		} else {
+			await ShareLinkModel.deleteOne({ shortLink: user.shareableLink, userId: user._id });
 			user.shareableLink = "";
 			await user.save();
 			res.status(200).json({
@@ -427,14 +429,14 @@ app.post('/api/v1/brain/share', auth, async (req, res) => {
 app.get('/api/v1/brain/:shareLink', async (req, res) => {
 	try {
 		const shareLink = req.params.shareLink;
-		const decoded = jwt.verify(shareLink, JWT_SECRET);
-		if (typeof decoded === "string") {
+		const shareLinkExists = await ShareLinkModel.findOne({ shortLink: shareLink });
+		if (!shareLinkExists) {
 			res.status(403).json({
-				message: "Unauthorized"
+				message: "Link expired"
 			});
 			return;
 		}
-		const userid = decoded.userid;
+		const userid = shareLinkExists.userId;
 		const user = await UserModel.findOne({ _id: userid })
 		if (!user) {
 			res.status(403).json({
@@ -513,18 +515,19 @@ app.post('/api/v1/brain/share/selected', auth, async (req, res) => {
 				contents[i].visibility = "public";
 				await contents[i].save();
 			}
-			const shareParam = jwt.sign({
-				userid: user._id
-			}, JWT_SECRET, {
-				expiresIn: "30d"
+			const shortID = UUID();
+			await ShareLinkModel.create({
+				shortLink: shortID,
+				userId: user._id
 			});
-			user.shareableLinkSome = shareParam;
+			user.shareableLinkSome = shortID;
 			await user.save();
 			res.status(200).json({
 				message: "Share status updated successfully",
 				shareableLink: user.shareableLinkSome
 			});
 		} else {
+			await ShareLinkModel.deleteOne({ shortLink: user.shareableLinkSome, userId: user._id });
 			user.shareableLinkSome = "";
 			await user.save();
 			const contents = await ContentModel.find({ visibility: "public", userId: userid });
@@ -548,14 +551,14 @@ app.post('/api/v1/brain/share/selected', auth, async (req, res) => {
 app.get('/api/v1/brain/selected/:shareLink', async (req, res) => {
 	try {
 		const shareLink = req.params.shareLink;
-		const decoded = jwt.verify(shareLink, JWT_SECRET);
-		if (typeof decoded === "string") {
+		const shareLinkExists = await ShareLinkModel.findOne({ shortLink: shareLink });
+		if (!shareLinkExists) {
 			res.status(403).json({
-				message: "Unauthorized"
+				message: "Link expired"
 			});
 			return;
 		}
-		const userid = decoded.userid;
+		const userid = shareLinkExists.userId;
 		const user = await UserModel.findOne({ _id: userid })
 		if (!user) {
 			res.status(403).json({
