@@ -17,7 +17,7 @@ interface formDataType {
 }
 
 function CreateModal() {
-    const { setModalComponent, setModalOpen, setHeroKey } = useAppContext();
+    const { setModalComponent, setModalOpen, setData } = useAppContext();
     const [formData, setFormData] = useState<formDataType>({
         type: "",
         title: "",
@@ -32,6 +32,23 @@ function CreateModal() {
     const [spanDisplay, setSpanDisplay] = useState(false);
     const [titleEmpty, setTitleEmpty] = useState(true);
     const [emptyTitlePrompt, setEmptyTitlePrompt] = useState(false);
+
+    interface dateType {
+        day: string;
+        month: string;
+        year: string;
+    };
+    
+    interface dataType {
+        _id: string;
+        title: string;
+        link: string;
+        type: "youtube" | "tweet" | "document" | "link" | "instagram" | "pinterest";
+        content: string;
+        tags: string[];
+        date: dateType;
+    };
+    
 
     const [contentFullButtonDisabled, setContentFullButtonDisabled] = useState(false);
 
@@ -132,7 +149,7 @@ function CreateModal() {
         }
         try {
             setLoading(true);
-            await axios.post("/content", {
+            const res = await axios.post("/content", {
                 title: formData.title,
                 content: formData.content,
                 link: formData.link,
@@ -145,7 +162,14 @@ function CreateModal() {
             });
             setLoading(false);
             toast.success("Content added successfully");
-            setHeroKey((prev) => prev + 1);
+            setData((prevData: dataType[]) => [...prevData, res.data.content]);
+            setFormData({
+                type: "",
+                title: "",
+                content: "",
+                link: "",
+                tags: [],
+            })
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -305,7 +329,6 @@ function CreateModal() {
                 {
                     !contentFull &&
                     <Button loading={loading} onClick={()=>{
-                        console.log(formData);
                         handlePostContent();
                     }} variant='primary' size='md' text="Create" startIcon={<PlusIcon size='md' />} width='w-full' />
                 }

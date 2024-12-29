@@ -18,29 +18,12 @@ import ShareManyModal from "./ShareManyModal";
 import toast from "react-hot-toast";
 // import ProfileIcon from "./ProfileIcon";
 
-interface dateType {
-	day: string;
-	month: string;
-	year: string;
-};
-
-interface dataType {
-	_id: string;
-	title: string;
-	link: string;
-	type: "youtube" | "tweet" | "document" | "link" | "instagram" | "pinterest";
-	content: string;
-	tags: string[];
-	date: dateType;
-};
-
 const dummy = [
 	1, 2, 3, 4, 5, 6, 7, 8, 9
 ];
 
 export default function Hero() {
-	const [data, setData] = useState<dataType[]>([]);
-	const { setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink, baseShareManyLink, setInitial, setFromColor, setToColor } = useAppContext();
+	const { data, setData, setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink, baseShareManyLink, setInitial, setFromColor } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
@@ -75,8 +58,7 @@ export default function Hero() {
 			setShareMany(response.data.shareSome);
 			setShareManyLink(baseShareManyLink + response.data.shareLinkSome);
 			setInitial(response.data.initial);
-			setFromColor("from-["+response.data.colors.from+"]");
-			setToColor("to-["+response.data.colors.to+"]");
+			setFromColor(response.data.colors.from);
 			console.log(response.data);
 		} catch (error) {
 			console.log(error);
@@ -117,8 +99,7 @@ export default function Hero() {
 					'Authorization': localStorage.getItem('token')
 				}
 			});
-			fetchData();
-			setHeroKey(Math.random());
+			setData(data.filter((item) => item._id !== id));
 		} catch (error) {
 			console.log(error);
 		}
@@ -134,8 +115,7 @@ export default function Hero() {
 					'Authorization': localStorage.getItem('token')
 				}
 			});
-			fetchData();
-			setHeroKey(Math.random());
+			setData(data.filter((item) => !selected.includes(item._id)));
 			return 1;
 		} catch (error) {
 			console.log(error);

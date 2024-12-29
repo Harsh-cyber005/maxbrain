@@ -8,7 +8,6 @@ import { auth } from './middleware';
 import cors from 'cors';
 import { Mail } from './emailer';
 import { v4 as UUID } from 'uuid';
-import { access } from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,25 +25,21 @@ function checkOTP(sent: string): boolean{
 }
 
 const tailwindColors = [
-	'#f87171', // red-500
-	'#fbbf24', // yellow-500
-	'#34d399', // green-500
-	'#60a5fa', // blue-500
-	'#a78bfa', // purple-500
-	'#f472b6', // pink-500
-	'#fb923c', // orange-500
-	'#38bdf8', // sky-500
-	'#22d3ee', // cyan-500
-	'#14b8a6', // teal-500
-	'#8b5cf6', // violet-500
-	'#eab308', // amber-500
-	'#84cc16', // lime-500
-	'#4ade80', // emerald-500
-	'#6366f1', // indigo-500
-	'#64748b', // slate-500
-	'#6b7280', // gray-500
-	'#737373', // neutral-500
-	'#737373', // stone-500
+	'bg-gradient-to-br from-[#f87171] to-[#fbbf24]', // red-500 yellow-500
+	'bg-gradient-to-br from-[#fbbf24] to-[#34d399]', // yellow-500 green-500
+	'bg-gradient-to-br from-[#34d399] to-[#60a5fa]', // green-500 blue-500
+	'bg-gradient-to-br from-[#60a5fa] to-[#818cf8]', // blue-500 indigo-500
+	'bg-gradient-to-br from-[#818cf8] to-[#f472b6]', // indigo-500 pink-500
+	'bg-gradient-to-br from-[#f472b6] to-[#f87171]', // pink-500 red-500
+	'bg-gradient-to-br from-[#f87171] to-[#fbbf24]', // red-500 yellow-500
+	'bg-gradient-to-br from-[#fbbf24] to-[#34d399]', // yellow-500 green-500
+	'bg-gradient-to-br from-[#34d399] to-[#60a5fa]', // green-500 blue-500
+	'bg-gradient-to-br from-[#60a5fa] to-[#818cf8]', // blue-500 indigo-500
+	'bg-gradient-to-br from-[#818cf8] to-[#f472b6]', // indigo-500 pink-500
+	'bg-gradient-to-br from-[#f472b6] to-[#f87171]', // pink-500 red-500
+	'bg-gradient-to-br from-[#f87171] to-[#fbbf24]', // red-500 yellow-500
+	'bg-gradient-to-br from-[#fbbf24] to-[#34d399]', // yellow-500 green-500
+	'bg-gradient-to-br from-[#34d399] to-[#60a5fa]', // green-500 blue-500
 ];
 
 app.get('/', (req, res) => {
@@ -305,6 +300,7 @@ app.post('/api/v1/content', auth, async (req, res) => {
 		});
 		await contentModel.save();
 		res.status(200).json({
+			content: contentModel,
 			message: "Content saved successfully"
 		});
 	} catch (e) {

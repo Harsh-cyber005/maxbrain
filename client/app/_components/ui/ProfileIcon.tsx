@@ -1,18 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useAppContext } from '@/app/context/AppContext'
 import React from 'react'
-import clsx from 'clsx';
 
 export default function ProfileIcon() {
-    const { initial, fromColor, toColor } = useAppContext();
+    const { initial, fromColor } = useAppContext();
     const [open, setOpen] = React.useState(false);
 
-    const dynClass = clsx("flex items-center justify-center w-10 h-10 bg-gradient-to-br rounded-full cursor-pointer hover:brightness-90 duration-200", fromColor, toColor)
     return (
-        <div className='relative'>
+        <div className='relative '>
             <div onClick={()=>{
                 setOpen(!open)
-            }} className={dynClass}>
+            }} className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:brightness-90 duration-200 ${fromColor}`}>
                 <span className="text-white font-bold text-lg select-none">{initial}</span>
             </div>
             {

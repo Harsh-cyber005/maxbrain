@@ -45,9 +45,27 @@ interface AppContextType {
     setFromColor: React.Dispatch<React.SetStateAction<string>>;
     toColor: string;
     setToColor: React.Dispatch<React.SetStateAction<string>>;
+    data: dataType[];
+    setData: React.Dispatch<React.SetStateAction<dataType[]>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
+
+interface dateType {
+	day: string;
+	month: string;
+	year: string;
+};
+
+interface dataType {
+	_id: string;
+	title: string;
+	link: string;
+	type: "youtube" | "tweet" | "document" | "link" | "instagram" | "pinterest";
+	content: string;
+	tags: string[];
+	date: dateType;
+};
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -70,6 +88,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [initial, setInitial] = useState<string>("");
     const [fromColor, setFromColor] = useState<string>("");
     const [toColor, setToColor] = useState<string>("");
+    const [data, setData] = useState<dataType[]>([]);
 
     useEffect(() => {
         if(selected.length === 0) {
@@ -123,7 +142,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             fromColor,
             setFromColor,
             toColor,
-            setToColor
+            setToColor,
+            data,
+            setData
         }}>
             {children}
         </AppContext.Provider>
