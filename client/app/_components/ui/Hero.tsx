@@ -23,7 +23,7 @@ const dummy = [
 ];
 
 export default function Hero() {
-	const { data, setData, setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, setHeroKey, shareMany, setShareMany, setShareManyLink, baseShareManyLink, setInitial, setFromColor } = useAppContext();
+	const { data, setData, setModalOpen, setTotalContent, totalContent, setModalComponent, filter, setShare, setAuthName, authName, setShareLink, baseShareLink, setSidebarOpen, setToken, selected, selectActive, setSelectActive, setSelected, shareMany, setShareMany, setShareManyLink, baseShareManyLink, setInitial, setFromColor } = useAppContext();
 	const router = useRouter();
 	const [h1Display, setH1Display] = useState("Loading...");
 	const [loading, setLoading] = useState(true);
