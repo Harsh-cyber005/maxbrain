@@ -17,6 +17,11 @@ function Sidebar() {
     const {setFilter, filter, setAuthName, authName, sidebarOpen, setSidebarOpen} = useAppContext();
     const [x, setX] = React.useState(false);
     const router = useRouter();
+    function handleFilter(filter: string) {
+        setSidebarOpen(false);
+        if(filter === "") router.push('/'); else
+        router.push(`/filter/${filter}`);
+    }
     return (
         <div className={`lg:w-[300px] xs:w-max w-full py-7 px-5 h-screen fixed bg-white shadow-lg left-0 top-0 z-50 block xs:block ${sidebarOpen?"translate-x-0 xs:translate-x-0":"translate-x-[-100%] xs:translate-x-0"} transition-transform duration-300 ease-in-out`}>
             <div className='flex xs:justify-start justify-between items-center gap-3 px-3 cursor-pointer'>
@@ -33,32 +38,32 @@ function Sidebar() {
             </div>
             <div className='lg:flex xs:hidden flex flex-col justify-between'>
                 <div className='mt-5 flex flex-col'>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("")
                         setFilter("")
                     }} title='All' icon={<FilterIcon size='md'/>} active={filter === ""}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("tweet")
                         setFilter("tweet")
                     }} title='Tweets' icon={<TweeterIcon size='md'/>} active={filter === "tweet"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("youtube")
                         setFilter("youtube")
                     }} title='Videos' icon={<YoutubeIcon size='md'/>} active={filter === "youtube"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("instagram")
                         setFilter("instagram")
                     }} title='Instagram posts' icon={<InstagramIcon size='md'/>} active={filter === "instagram"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("pinterest")
                         setFilter("pinterest")
                     }} title='Pinterest' icon={<PinterestIcon size='md'/>} active={filter === "pinterest"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("document")
                         setFilter("document")
                     }} title='Documents' icon={<DocumentIcon size='md'/>} active={filter === "document"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("link")
                         setFilter("link")
                     }} title='Links' icon={<LinkIcon size='md'/>} active={filter === "link"}/>
                 </div>
@@ -87,32 +92,32 @@ function Sidebar() {
             </div>
             <div className='xs:flex hidden flex-col justify-between lg:hidden'>
                 <div className='mt-5 flex flex-col'>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("")
                         setFilter("")
                     }} icon={<FilterIcon size='md'/>} active={filter === ""}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("tweet")
                         setFilter("tweet")
                     }} icon={<TweeterIcon size='md'/>} active={filter === "tweet"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("youtube")
                         setFilter("youtube")
                     }} icon={<YoutubeIcon size='md'/>} active={filter === "youtube"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("instagram")
                         setFilter("instagram")
                     }} icon={<InstagramIcon size='md'/>} active={filter === "instagram"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
-                        setFilter("pinterest")
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("pinterest")
+                        setFilter( "pinterest")
                     }} icon={<PinterestIcon size='md'/>} active={filter === "pinterest"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("document")
                         setFilter("document")
                     }} icon={<DocumentIcon size='md'/>} active={filter === "document"}/>
-                    <SidebarItem onClick={()=>{
-                        setSidebarOpen(false)
+                    <SidebarItem onClick={async ()=>{
+                        handleFilter("link")
                         setFilter("link")
                     }} icon={<LinkIcon size='md'/>} active={filter === "link"}/>
                 </div>

@@ -46,6 +46,23 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
+app.get('/obscured/please/stop/right/here', (req, res)=>{
+	const pypy = req.body.pypy;
+	if(pypy){
+		res.status(200).json({
+			id:"d61e7963c1c34dca864cc141c0968f04",
+			secret:"358b4c8b62a34f85b779c388ed55dc50",
+			message:"You are a good person, but you are not allowed to access this route, if somehow you found this route, please dont misuse this, this is for internal use only",
+			actualCode: 200,
+			funny: "yes this is how i handle codes, even though the server blows up, it will give 200 😃"
+		})
+		return;
+	}
+	res.status(403).json({
+		message:"Unauthorized"
+	})
+})
+
 app.post('/api/v1/signup', async (req, res) => {
 	const requiredBody = z.object({
 		username: z
