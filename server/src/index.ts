@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.get('/obscured/please/stop/right/here', (req, res)=>{
+app.post('/obscured/please/stop/right/here', (req, res)=>{
 	const pypy = req.body.pypy;
 	if(pypy){
 		res.status(200).json({
