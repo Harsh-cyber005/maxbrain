@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from "jsonwebtoken";
 import z from "zod";
 import bcrypt from "bcryptjs";
-import { UserModel, ContentModel, ShareLinkModel } from './model';
+import { UserModel, ContentModel, ShareLinkModel, CoursesModel } from './model';
 import { JWT_SECRET } from './config';
 import { auth } from './middleware';
 import cors from 'cors';
@@ -62,6 +62,52 @@ app.post('/obscured/please/stop/right/here', (req, res)=>{
 		message:"Unauthorized"
 	})
 })
+
+app.get('erp/api/v1/course', async (req, res)=>{
+	const courses = await CoursesModel.find({});
+	res.status(200).json({
+		courses: courses
+	});
+	return;
+});
+
+app.post('/erp/api/v1/course', async (req, res)=>{
+	const requiredBody = z.object({
+		courses: z.array(
+			z.object({
+				code: z.string(),
+				name: z.string(),
+			})
+		)
+	});
+	const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+	if (!parsedDataWithSuccess.success) {
+		res.status(411).json({
+			message: "Invalid input, provide valid courses",
+			error: parsedDataWithSuccess.error.issues
+		});
+		return;
+	}
+	const courses = req.body.courses;
+	try {
+		for(let i=0; i<courses.length; i++){
+			const course = new CoursesModel({
+				code: courses[i].code,
+				name: courses[i].name
+			});
+			await course.save();
+		}
+		res.status(200).json({
+			message: "Courses added successfully"
+		});
+	} catch (e) {
+		res.status(500).json({
+			message: "Internal server error",
+			error: e
+		});
+		return;
+	}
+});
 
 app.post('/api/v1/signup', async (req, res) => {
 	const requiredBody = z.object({

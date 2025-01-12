@@ -114,6 +114,18 @@ const ShareLinkSchema = new Schema({
     },
 });
 
+const CoursesSchema = new Schema({
+    code: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    }
+});
+
 export const UserModel = model('User', UserSchema);
 export const ContentModel = model('Content', ContentSchema);
 export const ShareLinkModel = model('ShareLink', ShareLinkSchema);
+export const CoursesModel = model('Courses', CoursesSchema);
