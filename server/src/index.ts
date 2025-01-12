@@ -63,7 +63,7 @@ app.post('/obscured/please/stop/right/here', (req, res)=>{
 	})
 })
 
-app.get('erp/api/v1/course', async (req, res)=>{
+app.get('/erp/api/v1/course', async (req, res)=>{
 	const courses = await CoursesModel.find({});
 	res.status(200).json({
 		courses: courses
